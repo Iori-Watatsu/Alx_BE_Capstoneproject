@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Welcome, User")
+    return HttpResponse("What's in your cart")
