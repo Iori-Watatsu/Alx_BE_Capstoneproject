@@ -16,7 +16,7 @@ class User(models.Model):
 
 class Profile(models.Model):
     id = models.IntegerField()
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
     avatar_url = models.CharField(max_length=100)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=10)
