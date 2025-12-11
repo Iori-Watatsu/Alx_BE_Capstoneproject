@@ -1,10 +1,11 @@
 from django.db import models
 from products.models import Product
+from users.models import Profile
 
 # Create your models here.
 class Cart(models.Model):
     id = models.IntegerField()
-    user_id = models.IntegerField()
+    user_id = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='users')
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
 
