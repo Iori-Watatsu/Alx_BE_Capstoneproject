@@ -15,3 +15,10 @@ class Product(models.Model):
     is_active = models.BooleanField()
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
+
+class Product_Image(models.Model):
+    id = models.IntegerField()
+    product_id = models.ForeignKey(Product, related_name='products')
+    image_url = models.CharField(max_length=50)
+    alt_text = models.TextField()
+    is_primary = models.BooleanField()
