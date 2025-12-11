@@ -1,12 +1,13 @@
 from django.db import models
 from django.db.models import TextField, CASCADE
 from products.models import Product
+from users.models import Profile
 
 # Create your models here.
 class Order(models.Model):
     id = models.IntegerField()
     order_number = models.CharField(max_length=100)
-    user_id = models.IntegerField()
+    user_id = models.ForeignKey(Profile, on_delete=models.CASCADE, realted_name='users')
     total_amount = models.DecimalField()
     status = models.TextField()
     shipping_address = models.TextField()
