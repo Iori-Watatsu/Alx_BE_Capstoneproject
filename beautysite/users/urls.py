@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path("", views.users, name="users"),
+    path('templates/')
 ]
