@@ -1,19 +1,19 @@
 from django.db import models
 
 # Create your models here.
-class Category(models.Model):
-    id = models.IntegerField()
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    slug = models.TextField()
-    parent_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products')
-    is_active = models.BooleanField()
-    
+#class Category(models.Model):
+ #   id = models.IntegerField()
+  #  name = models.CharField(max_length=100)
+   # description = models.TextField()
+    # slug = models.TextField()
+    # parent_id = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='products', null =True, blank=True)
+    # is_active = models.BooleanField()
+
 class Product(models.Model):
     id = models.IntegerField()
     name = models.TextField()
     description = models.TextField()
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
+    #category_id = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
     brand = models.CharField(max_length=100)
     price = models.DecimalField()
     sale_price = models.DecimalField()
