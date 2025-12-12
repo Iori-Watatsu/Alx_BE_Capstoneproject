@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import TextField, CASCADE
-from products.models import products
+from products.models import Product
 from users.models import Profile
 
 # Create your models here.
