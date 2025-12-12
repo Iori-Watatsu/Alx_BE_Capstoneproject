@@ -7,7 +7,7 @@ from users.models import Profile
 class Order(models.Model):
     id = models.IntegerField()
     order_number = models.CharField(max_length=100)
-    user_id = models.ForeignKey(Profile, on_delete=models.CASCADE, realted_name='users')
+    user_id = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='users')
     total_amount = models.DecimalField()
     status = models.TextField()
     shipping_address = models.TextField()
