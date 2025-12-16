@@ -14,14 +14,25 @@ class User(models.Model):
     is_staff = models.BooleanField()
     is_superuser = models.BooleanField()
 
+
 class Profile(models.Model):
     id = models.IntegerField()
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
     avatar_url = models.CharField(max_length=100)
     date_of_birth = models.DateField()
-    gender = models.CharField(max_length=10)
-    skin_type = models.TextField()
-    hair_type = models.TextField()
+    gender = models.CharField(max_length=10, blank=True, choices=[
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    ])
+    skin_type = models.CharField(max_length=50, blank=True, choices=[
+        ('oily', 'Oily'),
+        ('dry', 'Dry'),
+        ('combination', 'Combination'),
+        ('normal', 'Normal'),
+        ('sensitive', 'Sensitive'),
+    ])
+    hair_type = models.CharField(max_length=50, blank=True)
     address = models.TextField()
     city = models.TextField()
     country = models.TextField()
