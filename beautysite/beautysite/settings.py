@@ -45,6 +45,13 @@ INSTALLED_APPS = [
     'reviews.apps.ReviewsConfig',
     'users.apps.UsersConfig',
     'wishlist.apps.WishlistConfig',
+    'users',
+    'cart',
+    'orders',
+    'products',
+    'reviews',
+    'wishlist',
+
 ]
 
 MIDDLEWARE = [
@@ -133,3 +140,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = '/profile/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = 'acoounts/login/'
