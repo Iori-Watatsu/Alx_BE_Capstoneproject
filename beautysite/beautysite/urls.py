@@ -25,4 +25,11 @@ urlpatterns = [
     path('reviews/', include('reviews.urls')),
     path('users/', include('users.urls')),
     path('wishlist/', include('wishlist.urls')),
+    path('templates/', include('django.contrib.auth.urls')),
+    path('templates/accounts/',TemplateView.as_view(template_name='accounts/profile.html'), name='profile'),
+    path('templates/change_passwd',TemplateView.as_view(template_name='passwd_reset/change_passwd.html'), name='change_passwd'),
+    path('templates/passwd_changed/',TemplateView.as_view(template_name='passwd_reset/passwd_changed.html'), name='passwd_changed'),
+    path('templates/registration/,TemplateView.as_view(template_name='registration/login.html', name=),
+    path('templates/registration',TemplateView.as_view(template_name='registration/login.html'), name='login'),
+
 ]
