@@ -31,5 +31,5 @@ urlpatterns = [
     path('templates/passwd_changed/',TemplateView.as_view(template_name='passwd_reset/passwd_changed.html'), name='passwd_changed'),
     path('templates/registration/,TemplateView.as_view(template_name='registration/login.html', name=),
     path('templates/registration',TemplateView.as_view(template_name='registration/login.html'), name='login'),
-
+         path('accounts/', include('django.contrib.auth.urls')),
 ]
