@@ -39,12 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Project custom apps...!!!
-    'cart.apps.CartConfig',
-    'orders.apps.OrdersConfig',
-    'products.apps.ProductsConfig',
-    'reviews.apps.ReviewsConfig',
-    'users.apps.UsersConfig',
-    'wishlist.apps.WishlistConfig',
     'users',
     'cart',
     'orders',
