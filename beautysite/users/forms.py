@@ -24,7 +24,17 @@ class CustomUserCreationForm(UserCreationForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['skin_type', 'skin_concerns', 'preferred_brands', 'allergies', 'avatar']
+        fields = [
+            "avatar_url",
+            "date_of_birth",
+            "gender",
+            "skin_type",
+            "hair_type",
+            "address",
+            "city",
+            "country",
+            "postal_code",
+        ]
         widgets = {
             'skin_concerns': forms.Textarea(attrs={'rows': 3}),
             'preferred_brands': forms.Textarea(attrs={'rows': 3}),
