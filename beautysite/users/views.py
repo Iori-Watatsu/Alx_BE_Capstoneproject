@@ -1,13 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.urls import reverse_lazy
+from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, UpdateView, DetailView
-from .models import Profile
+from .models import CustomUser, UserProfile
+from .forms import CustomUserCreationForm, ProfileUpdateForm
 
 # Create your views here.
+def home(request):
+    return render(request, 'users/home.html')
+
 def users(request):
     return HttpResponse("Welcome, User")
 
@@ -21,18 +26,21 @@ class UserCreationForm(UserCreationForm):
         self.fields['email'].required = True
 
 class SignUpView(CreateView):
-    form_class = UserCreationForm
-    template_name = 'registration/signup.html'
-    success_url = reverse_lazy('profile')
+    form_class = CustomUserCreationForm
+    template_name = 'users/signup.html'
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        user = form.save()
+        response = super().form_valid(form)
 
-        Profile.objects.create(user=user)
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password1')
 
-        login(self.request, user)
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(self.request, user)
 
-        return redirect('profile')
+            UserProfile.objects.create(user=user)
 
 class ProfileView(DetailView):
     model = Profile
