@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, UserProfile
+from .models import CustomUser, Profile
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -23,7 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = ['skin_type', 'skin_concerns', 'preferred_brands', 'allergies', 'avatar']
         widgets = {
             'skin_concerns': forms.Textarea(attrs={'rows': 3}),
