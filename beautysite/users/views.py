@@ -22,7 +22,7 @@ class UserCreationForm(UserCreationForm):
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
-    template_name = '/beautysite/templates/registration/signup.html'
+    template_name = 'registration/signup.html'
     success_url = reverse_lazy('profile')
 
     def form_valid(self, form):
@@ -33,3 +33,7 @@ class SignUpView(CreateView):
         login(self.request, user)
 
         return redirect('profile')
+
+class ProfileView(DetailView):
+    model = Profile
+    template_name = 'accounts/profile.html'
