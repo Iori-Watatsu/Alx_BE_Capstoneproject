@@ -1,7 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class User(models.Model):
+class CustomUser(models.Model):
     id = models.IntegerField()
     usename = models.CharField(max_length=15)
     email = models.EmailField()
@@ -17,7 +18,7 @@ class User(models.Model):
 
 class Profile(models.Model):
     id = models.IntegerField()
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
+    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='profile')
     avatar_url = models.CharField(max_length=100)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=10, blank=True, choices=[
