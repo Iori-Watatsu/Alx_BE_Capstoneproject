@@ -40,13 +40,12 @@ INSTALLED_APPS = [
 
     # Project custom apps...!!!
     'users',
+    'category',
+    'products',
     'cart',
     'orders',
-    'products',
-    'reviews',
     'wishlist',
-    'category',
-
+    'reviews',
 ]
 
 MIDDLEWARE = [
