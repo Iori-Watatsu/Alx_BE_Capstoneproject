@@ -16,6 +16,13 @@ class Order(models.Model):
     payment_status = models.CharField(max_length=100)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
+    order_status = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
+    ]
 
 class Order_Item(models.Model):
     id = models.IntegerField()
