@@ -13,6 +13,9 @@ from .forms import CustomUserCreationForm, ProfileUpdateForm
 def home(request):
     return render(request, 'users/home.html')
 
+def profile(request):
+    return render(request, 'users/profile.html')
+
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'users/signup.html'
