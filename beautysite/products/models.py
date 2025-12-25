@@ -10,8 +10,8 @@ class Product(models.Model):
     description = models.TextField()
     category_id = models.ForeignKey(category.models.Category, on_delete=models.CASCADE, related_name="products")
     brand = models.CharField(max_length=100)
-    price = models.DecimalField()
-    sale_price = models.DecimalField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2)
     sku = models.CharField(max_length=100)
     stock_quantity = models.IntegerField()
     is_featured = models.BooleanField()
@@ -21,7 +21,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     id = models.IntegerField()
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image_url = models.CharField(max_length=50)
     alt_text = models.TextField()
     is_primary = models.BooleanField()

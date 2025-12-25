@@ -6,8 +6,8 @@ from django.conf import settings
 # Create your models here.
 class Review(models.Model):
    
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     rating = models.IntegerField()
     title = models.CharField(max_length=100)
     comment = models.TextField()

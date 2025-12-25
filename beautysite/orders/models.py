@@ -2,13 +2,14 @@ from django.db import models
 from django.db.models import TextField, CASCADE
 from products.models import Product
 from users.models import Profile
+from django.conf import settings
 
 # Create your models here.
 class Order(models.Model):
     
     order_number = models.CharField(max_length=100)
-    user_id = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='users')
-    total_amount = models.DecimalField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.TextField()
     shipping_address = models.TextField()
     billing_address = models.TextField()
@@ -27,7 +28,7 @@ class Order(models.Model):
 class Order_Item(models.Model):
 
     order_id = models.ForeignKey(Order, on_delete=CASCADE, related_name='orders')
-    product_id = models.ForeignKey(Product, on_delete=CASCADE, related_name='products')
+    product = models.ForeignKey(Product, on_delete=CASCADE, related_name='order_items')
     quantity = models.IntegerField()
-    price_at_purchase = models.DecimalField()
-    subtotal = models.DecimalField()
+    price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
