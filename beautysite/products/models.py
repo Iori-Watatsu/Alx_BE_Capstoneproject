@@ -1,11 +1,14 @@
 from django.db import models
 
+import category.models
+
+
 # Create your models here.
 class Product(models.Model):
     id = models.IntegerField()
     name = models.TextField()
     description = models.TextField()
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
+    category_id = models.ForeignKey(category.models.Category, on_delete=models.CASCADE, related_name="products")
     brand = models.CharField(max_length=100)
     price = models.DecimalField()
     sale_price = models.DecimalField()
