@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, UpdateView, DetailView
-from .models import CustomUser, UserProfile
+from .models import CustomUser, Profile
 from .forms import CustomUserCreationForm, ProfileUpdateForm
 
 # Create your views here.
@@ -31,7 +31,7 @@ class SignUpView(CreateView):
         if user is not None:
             login(self.request, user)
 
-            UserProfile.objects.create(user=user)
+            Profile.objects.create(user=user)
 
         return response
 
@@ -42,7 +42,7 @@ class CustomLoginView(LoginView):
 @login_required
 def profile(request):
     user = request.user
-    profile, created = UserProfile.objects.get_or_create(user=user)
+    profile, created = Profile.objects.get_or_create(user=user)
     return render(request, 'users/profile.html', {
         'user': user,
         'profile': profile
@@ -51,7 +51,7 @@ def profile(request):
 @login_required
 def edit_profile(request):
     user = request.user
-    profile, created = UserProfile.objects.get_or_create(user=user)
+    profile, created = Profile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
         user.first_name = request.POST.get('first_name', user.first_name)
@@ -74,7 +74,7 @@ def edit_profile(request):
 @login_required
 def beauty_quiz(request):
     if request.method == 'POST':
-        profile, created = UserProfile.objects.get_or_create(user=request.user)
+        profile, created = Profile.objects.get_or_create(user=request.user)
 
         profile.skin_type = request.POST.get('skin_type', '')
         profile.skin_concerns = request.POST.get('skin_concerns', '')
