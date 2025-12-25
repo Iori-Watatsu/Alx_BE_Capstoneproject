@@ -7,6 +7,6 @@ from django.conf import settings
 class Wishlist(models.Model):
     
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='whishlists')
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlisted')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlisted')
     added_at = models.DateTimeField()
     
