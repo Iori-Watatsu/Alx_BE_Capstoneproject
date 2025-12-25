@@ -5,7 +5,7 @@ from users.models import Profile
 
 # Create your models here.
 class Order(models.Model):
-    id = models.IntegerField()
+    
     order_number = models.CharField(max_length=100)
     user_id = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='users')
     total_amount = models.DecimalField()
@@ -25,7 +25,7 @@ class Order(models.Model):
     ]
 
 class Order_Item(models.Model):
-    id = models.IntegerField()
+
     order_id = models.ForeignKey(Order, on_delete=CASCADE, related_name='orders')
     product_id = models.ForeignKey(Product, on_delete=CASCADE, related_name='products')
     quantity = models.IntegerField()

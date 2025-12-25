@@ -5,7 +5,7 @@ from django.conf import settings
 
 # Create your models here.
 class Review(models.Model):
-    id = models.IntegerField()
+   
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products')
     rating = models.IntegerField()

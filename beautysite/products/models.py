@@ -5,7 +5,7 @@ import category.models
 
 # Create your models here.
 class Product(models.Model):
-    id = models.IntegerField()
+    
     name = models.TextField()
     description = models.TextField()
     category_id = models.ForeignKey(category.models.Category, on_delete=models.CASCADE, related_name="products")
