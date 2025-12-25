@@ -37,5 +37,5 @@ class Profile(models.Model):
     address = models.TextField()
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=)
+    postal_code = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now=True)
