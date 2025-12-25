@@ -19,17 +19,5 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('cart/', include('cart.urls')),
-    path('orders/', include('orders.urls')),
-    path('products/', include('products.urls')),
-    path('reviews/', include('reviews.urls')),
-    path('users/', include('users.urls')),
-    path('wishlist/', include('wishlist.urls')),
-    path('templates/', include('django.contrib.auth.urls')),
-    path('templates/accounts/',include(template_name='accounts/profile.html'), name='profile'),
-    path('templates/change_passwd',include(template_name='passwd_reset/change_passwd.html'), name='change_passwd'),
-    path('templates/passwd_changed/',TemplateView.as_view(template_name='passwd_reset/passwd_changed.html'), name='passwd_changed'),
-    path('accounts/login/',TemplateView.as_view(template_name='registration/login.html'), name='login'),
-    path('accounts/signup',TemplateView.as_view(template_name='registration/signup.html'), name='signup'),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('', include('users.urls')),
 ]
