@@ -35,11 +35,11 @@ class ProfileUpdateForm(forms.ModelForm):
             "country",
             "postal_code",
         ]
-        widgets = {
-            'skin_concerns': forms.Textarea(attrs={'rows': 3}),
-            'preferred_brands': forms.Textarea(attrs={'rows': 3}),
-            'allergies': forms.Textarea(attrs={'rows': 3}),
-        }
+        #widgets = {
+            #'skin_concerns': forms.Textarea(attrs={'rows': 3}),
+            #'preferred_brands': forms.Textarea(attrs={'rows': 3}),
+            #'allergies': forms.Textarea(attrs={'rows': 3}),
+        #}
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
