@@ -13,18 +13,6 @@ from .forms import CustomUserCreationForm, ProfileUpdateForm
 def home(request):
     return render(request, 'users/home.html')
 
-def users(request):
-    return HttpResponse("Welcome, User")
-
-class UserCreationForm(UserCreationForm):
-    class Meta:
-        model = Profile
-        fields = ('username', 'email', 'password1', 'password2')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['email'].required = True
-
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'users/signup.html'
@@ -42,6 +30,55 @@ class SignUpView(CreateView):
 
             UserProfile.objects.create(user=user)
 
-class ProfileView(DetailView):
-    model = Profile
-    template_name = 'accounts/profile.html'
+        return response
+
+class CustomLoginView(LoginView):
+    template_name = 'users/login.html'
+    redirect_authenticated_user = True
+
+@login_required
+def profile(request):
+    user = request.user
+    profile, created = UserProfile.objects.get_or_create(user=user)
+    return render(request, 'users/profile.html', {
+        'user': user,
+        'profile': profile
+    })
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    profile, created = UserProfile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+
+        profile.skin_type = request.POST.get('skin_type', profile.skin_type)
+        profile.skin_concerns = request.POST.get('skin_concerns', profile.skin_concerns)
+        profile.save()
+
+        return redirect('profile')
+
+    return render(request, 'users/edit_profile.html', {
+        'user': user,
+        'profile': profile
+    })
+
+
+@login_required
+def beauty_quiz(request):
+    if request.method == 'POST':
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+        profile.skin_type = request.POST.get('skin_type', '')
+        profile.skin_concerns = request.POST.get('skin_concerns', '')
+        profile.preferred_brands = request.POST.get('preferred_brands', '')
+        profile.allergies = request.POST.get('allergies', '')
+        profile.save()
+
+        return redirect('profile')
+
+    return render(request, 'users/beauty_quiz.html')
