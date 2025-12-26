@@ -13,6 +13,6 @@ class Cart(models.Model):
 class Cart_Item(models.Model):
 
     cart_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart_id')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items')
     quantity = models.IntegerField()
     added_at = models.DateTimeField()
