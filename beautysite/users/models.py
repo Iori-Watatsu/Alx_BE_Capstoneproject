@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
 
 
 class Profile(models.Model):
-    id = models.IntegerField()
+    
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     avatar_url = models.CharField(max_length=100)
     date_of_birth = models.DateField()
