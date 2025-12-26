@@ -20,7 +20,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField()
 
 class ProductImage(models.Model):
-    id = models.IntegerField()
+    
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image_url = models.CharField(max_length=50)
     alt_text = models.TextField()
