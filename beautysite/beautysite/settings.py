@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'beautysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': BASE_DIR / 'beautydatabase',
+        'NAME': 'beautysite_db',
         'USER': 'kamohelo',
         'PASSWORD': 'beautypass',
         'HOST': 'localhost',
