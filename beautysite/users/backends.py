@@ -9,18 +9,18 @@ class EmailBackend(BaseBackend):
             return None
 
         try:
-            user = user.objects.get(email__iexact=username)
-        except user.DoesNotExits:
+            user = User.objects.get(email__iexact=username)
+        except User.DoesNotExits:
             return None
 
-        if user.check_password(password) and self.user_can_authenticate(user):
+        if User.check_password(password) and self.user_can_authenticate(user):
             return user
         return None
 
     def get_user(selfself, user_id):
         try:
-            return user.objects.get(pk=user_id)
-        except user.DoesNotExits:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExits:
             return None
 
     def user_can_authenticate(selfself, user):
