@@ -6,7 +6,7 @@ from django.conf import settings
 class CustomUser(AbstractUser):
 
     username = models.CharField(max_length=150, unique=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=50)
     first_name = models.TextField()
     last_name = models.TextField()
@@ -16,6 +16,8 @@ class CustomUser(AbstractUser):
     is_staff = models.BooleanField()
     is_superuser = models.BooleanField()
 
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
 class Profile(models.Model):
     
