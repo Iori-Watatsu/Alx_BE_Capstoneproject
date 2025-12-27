@@ -1,6 +1,6 @@
 from django.db import models
 
-import category.models
+import category.models import Category
 
 
 # Create your models here.
