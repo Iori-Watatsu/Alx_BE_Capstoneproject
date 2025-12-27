@@ -19,5 +19,10 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
+    #path('', include('users.urls')),
+    path('acoounts/', include('django.contrib.auth.urls')),
+    path('accounts/profile',
+         TemplateView.as_view(template_name='acounts/profile.html'),
+         name='profile'),
+    path("signup/", SignupView.as_view(), name="templates/registration/signup"),
 ]
