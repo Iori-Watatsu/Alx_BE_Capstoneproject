@@ -21,7 +21,7 @@ from django.views.gerenic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('', include('users.urls')),
-    path('acoounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile',
          TemplateView.as_view(template_name='acounts/profile.html'),
          name='profile'),
