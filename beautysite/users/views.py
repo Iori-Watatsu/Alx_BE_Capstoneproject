@@ -17,9 +17,9 @@ def profile(request):
     return render(request, 'users/profile.html')
 
 class SignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    template_name = 'users/signup.html'
-    success_url = reverse_lazy('home')
+    form_class = UserCreationForm
+    template_name = 'registration/signup.html'
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         response = super().form_valid(form)
