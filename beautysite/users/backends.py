@@ -10,7 +10,7 @@ class EmailBackend(BaseBackend):
 
         try:
             user = User.objects.get(email__iexact=username)
-        except User.DoesNotExits:
+        except User.DoesNotExist:
             return None
 
         if User.check_password(password) and self.user_can_authenticate(user):
