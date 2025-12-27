@@ -86,8 +86,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'beautysite_db',
-        'USER': 'postgres',
-        'PASSWORD': '',
+        'USER': 'kamohelo',
+        'PASSWORD': 'password123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
