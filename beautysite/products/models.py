@@ -6,7 +6,7 @@ import category.models
 # Create your models here.
 class Product(models.Model):
     
-    name = models.CharField(max_length255)
+    name = models.CharField(max_length=255)
     description = models.TextField()
     category_id = models.ForeignKey(category.Category, on_delete=models.CASCADE, related_name="products")
     brand = models.CharField(max_length=100)
