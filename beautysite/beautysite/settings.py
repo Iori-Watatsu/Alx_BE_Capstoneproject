@@ -89,7 +89,7 @@ DATABASES = {
         'USER': 'kamohelo',
         'PASSWORD': 'beautypass',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 
