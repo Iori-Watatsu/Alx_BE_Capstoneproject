@@ -8,6 +8,8 @@ from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, UpdateView, DetailView
 from .models import CustomUser, Profile
 from .forms import CustomUserCreationForm, ProfileUpdateForm
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # Create your views here.
 def home(request):
@@ -36,14 +38,24 @@ class SignUpView(CreateView):
         return response
 
 class CustomLoginView(LoginView):
-    template_name = 'users/login.html'
+    template_name = 'registration/login.html'
     redirect_authenticated_user = True
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        # Validate credentials
+
+        # Login user
+
+        return Response("user logged in")
 
 @login_required
 def profile(request):
     user = request.user
     profile, created = Profile.objects.get_or_create(user=user)
-    return render(request, 'users/profile.html', {
+    return render(request, 'accounts/profile.html', {
         'user': user,
         'profile': profile
     })
@@ -85,3 +97,9 @@ def beauty_quiz(request):
         return redirect('profile')
 
     return render(request, 'users/beauty_quiz.html')
+
+class CustomLogoutView(APIView):
+    def post(self, request):
+        # Logout user
+
+        return Response("user logged out")
