@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from products.models import Product
 
 # Create your models here.
 class CustomUser(AbstractUser):
@@ -42,3 +43,17 @@ class Profile(models.Model):
     country = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now=True)
+
+class Post(models.Model):
+    name = models.CharField(max_length=255, default="Default name")
+    description = models.CharField(max_length=255, default="Default description")
+    brand = models.CharField(max_length=100, default='Unknown')
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    sku = models.CharField(max_length=100, default="SKU-DEFAULT")
+    stock_quantity = models.IntegerField(default=0)
+
+    class Meta:
+        permissions = [
+            ("can_publish_post", "Can publish post")
+        ]
