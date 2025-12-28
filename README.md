@@ -253,7 +253,9 @@ Acknowledgments (Current Acknowledgments, will be properly updated on submission
     ALX Backend Web Development Program
     Mathimu Ngobeni
     developer.mozilla.org
-    
+    django-rest-framework.org
+    turing.com
+
 
 About
 
