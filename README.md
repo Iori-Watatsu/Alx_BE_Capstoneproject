@@ -1,4 +1,4 @@
-ALX_BE_CapstoneProject: BeautyBasket 🛍️
+ALX_BE_CapstoneProject: BeautySite 🛍️
 Project Overview
 
 BeautySite is a full-featured e-commerce platform specializing in beauty and cosmetic products, built as the capstone project for the ALX Backend Engineering program. This Django-based web application provides users with a seamless shopping experience for skincare, makeup, and beauty accessories.
@@ -251,6 +251,9 @@ This project is created for educational purposes as part of the ALX Backend Engi
 Acknowledgments (Current Acknowledgments, will be properly updated on submission day)
 
     ALX Backend Web Development Program
+    Mathimu Ngobeni
+    developer.mozilla.org
+    
 
 About
 
