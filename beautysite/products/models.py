@@ -5,7 +5,6 @@ from category.models import Category
 
 # Create your models here.
 class Product(models.Model):
-    
     name = models.CharField(max_length=255)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
@@ -26,3 +25,5 @@ class ProductImage(models.Model):
     alt_text = models.TextField()
     is_primary = models.BooleanField()
 
+# Optimize queries to improve performance
+products = Product.objects.prefetch_related('category', 'images')
