@@ -18,13 +18,20 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 from users.views import SignUpView
+from rest_framework_simplejwt.views import(
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile',
-         TemplateView.as_view(template_name='acounts/profile.html'),
+         TemplateView.as_view(template_name='accounts/profile.html'),
          name='profile'),
     path("signup/", SignUpView.as_view(), name="signup"),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]
