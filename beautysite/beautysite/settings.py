@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework.authtoken',
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2'
 ]
 
 MIDDLEWARE = [
@@ -153,6 +156,9 @@ AUTH_USER_MODEL = 'users.CustomUser'
 AUTHENTICATION_BACKENDS = [
     "users.backends.EmailBackend",
     "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.google.GoogleOAuth2",
+    "social_core.backends.facebook.FacebookOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 REST_FRAMEWORK = {
@@ -161,6 +167,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 
     'DEFAULT_PERMISSION_CLASSES': (
@@ -194,3 +202,10 @@ X_FRAME_OPTIONS = 'DENY'
 CRSF_COOKIE_SECURE = False # True in production
 SESSION_COOKIE_SECURE = False # True in production
 SECURE_SSL_REDIRECT = False # True in production
+
+# Social auth
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'YOUR_GOOGLE_CLIENT_ID'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'YOUR_GOOGLE_CLIENT_SECRET'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
