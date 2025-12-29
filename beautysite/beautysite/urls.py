@@ -40,4 +40,5 @@ urlpatterns = [
     path('api/', include('products.urls')),
     path('api/auth/login/', TokenObtainPairView.as_view()),
     path('api/auth/refresh/', TokenRefreshView.as_view()),
+    path('auth/', include('rest_framework_social_oauth2.urls')),
 ]
