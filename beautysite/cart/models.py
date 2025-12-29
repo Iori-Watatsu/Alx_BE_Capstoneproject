@@ -15,14 +15,16 @@ class Cart(models.Model):
     updated_at = models.DateTimeField()
 
 class Cart_Item(models.Model):
-
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_cart'
+    )
     cart_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart_id')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items')
     quantity = models.IntegerField()
     added_at = models.DateTimeField()
 
+    def __str__(self):
+        return f"{self.product} ({self.quantity})" 
+
     class Meta:
         unique_together = ('user', 'product')
-
-# user can only see their cart
-queryset = Cart_Item.objects.filter(user=request.user)
