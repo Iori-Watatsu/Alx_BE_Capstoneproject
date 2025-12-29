@@ -51,9 +51,12 @@ INSTALLED_APPS = [
     'orders',
     'wishlist',
     'reviews',
+
+    # DRF apps
     'rest_framework',
     'rest_framework_simplejwt'
     'django_filters',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
