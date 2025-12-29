@@ -1,7 +1,11 @@
 from django.db import models
+from django.template.context_processors import request
+
 from products.models import Product
 from users.models import Profile
 from django.conf import settings
+
+User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 class Cart(models.Model):
@@ -16,3 +20,9 @@ class Cart_Item(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items')
     quantity = models.IntegerField()
     added_at = models.DateTimeField()
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+# user can only see their cart
+queryset = Cart_Item.objects.filter(user=request.user)
