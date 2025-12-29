@@ -183,3 +183,12 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': 'Bearer',
 }
+
+# Security Header
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# HTTPS & Cookies for production
+CRSF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
