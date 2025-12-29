@@ -146,6 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/accounts/profile'
 LOGIN_URL = 'registration/login/'
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
@@ -180,5 +181,5 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCES_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'AUTH_HEADER_TYPES': ('Bearer'),
+    'AUTH_HEADER_TYPES': 'Bearer',
 }
