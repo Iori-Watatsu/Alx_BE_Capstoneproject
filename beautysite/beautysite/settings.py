@@ -14,7 +14,6 @@ from pathlib import Path
 
 import django_filters.rest_framework
 from rest_framework import authentication
-from rest_framework_simplejwt import authentication
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -193,5 +192,6 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
 # HTTPS & Cookies for production
-CRSF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CRSF_COOKIE_SECURE = False # True in production
+SESSION_COOKIE_SECURE = False # True in production
+SECURE_SSL_REDIRECT = False # True in production
