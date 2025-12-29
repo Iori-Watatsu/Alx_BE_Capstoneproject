@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from rest_framework import viewsets, permissions
 from .models import Product
 from .serializers import ProductSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 # Create your views here.
 def products(request):
@@ -13,10 +15,10 @@ class IsAdminOrReadOnly(permissions.BasePermission):
             return True
         return request.user and request.user.is_staff
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(ModelViewSet):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     filterset_fields = ['brand']
     search_fields = ['name', 'description']
