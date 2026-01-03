@@ -255,6 +255,7 @@ Acknowledgments (Current Acknowledgments, will be properly updated on submission
     developer.mozilla.org
     django-rest-framework.org
     turing.com
+    https://medium.com/@alensabu12xtz/
 
 
 About
