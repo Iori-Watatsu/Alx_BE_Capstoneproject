@@ -4,3 +4,7 @@ from django.http import HttpResponse
 # Create your views here.
 def cart(request):
     return HttpResponse("What's in your cart")
+
+def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
+    
