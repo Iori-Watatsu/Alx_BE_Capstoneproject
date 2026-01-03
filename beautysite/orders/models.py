@@ -3,6 +3,7 @@ from django.db.models import TextField, CASCADE
 from products.models import Product
 from users.models import Profile
 from django.conf import settings
+from django.contrib.auth.models import  User
 
 # Create your models here.
 class Order(models.Model):
@@ -15,8 +16,8 @@ class Order(models.Model):
     billing_address = models.TextField()
     payment_method = models.CharField(max_length=100)
     payment_status = models.CharField(max_length=100)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
     order_status = [
         ('pending', 'Pending'),
         ('processing', 'Processing'),
