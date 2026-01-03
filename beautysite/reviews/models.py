@@ -14,3 +14,16 @@ class Review(models.Model):
     is_approved = models.BooleanField()
     created_at = models.DateTimeField(auto_now=True)
     content = models.TextField()
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="posts"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
