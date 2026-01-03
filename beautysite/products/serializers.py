@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
+    is_on_sale = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
         fields = '__all__'
@@ -18,3 +20,7 @@ class ProductSerializer(serializers.ModelSerializer):
         if sale_price and sale_price >= price: # \eqslantgtr sign was automatically created when adding the = sign next to the >
             raise serializers.ValidationError("Sale price must be less than regular price.")
         return data
+
+    def get_is_on_sale(self, obj):
+        return obj.sale_price < obj.price
+
