@@ -8,7 +8,10 @@ class Wishlist(models.Model):
     
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='whishlists')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlisted')
-    added_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
     
 class Post(models.Model):
     title = models.CharField(max_length=100)
