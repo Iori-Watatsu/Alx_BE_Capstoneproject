@@ -11,7 +11,7 @@ User = settings.AUTH_USER_MODEL
 class Cart(models.Model):
     
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='users')
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField()
 
 class Cart_Item(models.Model):
