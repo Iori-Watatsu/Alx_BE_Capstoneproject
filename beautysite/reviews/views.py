@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework import generics
+from rest_framework import generics, viewsets, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .models import Post
-from .serializers import PostSerializer
+from .models import Post, Review
+from .serializers import PostSerializer, ReviewSerializer
 from .permissions import IsAuthorOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import ReviewFilter
+
 
 # Create your views here.
 def reviews(request):
@@ -31,3 +34,17 @@ class PostRetrieveUpdateDestroyAPIView(
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+
+    filterset_class = ReviewViewSet
+    search_fields = ['comment']
+    ordering_fields = ['rating', 'created_at']
