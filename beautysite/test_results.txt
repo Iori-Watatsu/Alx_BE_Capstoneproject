@@ -1,2 +1,20 @@
-Found 5 test(s).
-Skipping setup of unused database(s): default.
+Found 6 test(s).
+Type 'yes' if you would like to try deleting the test database 'test_beautysite', or 'no' to cancel: Operations to perform:
+  Synchronize unmigrated apps: cart, category, django_filters, messages, orders, products, rest_framework, rest_framework_social_oauth2, reviews, staticfiles, wishlist
+  Apply all migrations: admin, auth, authtoken, contenttypes, oauth2_provider, sessions, social_django, users
+Synchronizing apps without migrations:
+  Creating tables...
+    Creating table category_category
+    Creating table products_product
+    Creating table products_productimage
+    Creating table cart_cart
+    Creating table cart_cart_item
+    Creating table cart_post
+    Creating table orders_order
+    Creating table orders_order_item
+    Creating table orders_post
+    Creating table wishlist_wishlist
+    Creating table wishlist_post
+    Creating table reviews_review
+    Creating table reviews_post
+    Running deferred SQL...

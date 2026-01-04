@@ -17,8 +17,8 @@ class CustomUser(AbstractUser):
     is_staff = models.BooleanField()
     is_superuser = models.BooleanField()
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
 class Profile(models.Model):
     
@@ -42,7 +42,7 @@ class Profile(models.Model):
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Post(models.Model):
     name = models.CharField(max_length=255, default="Default name")
