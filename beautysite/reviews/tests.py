@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate, APIClient
 from category.models import Category
 from products.models import Product
 from cart.models import Cart, CartItem
@@ -28,7 +27,7 @@ class ReviewTests(APITestCase):
             is_featured=True,
             category=self.category,
         )
-        self.review = Review.objects.create(user=self.user, product=self.product, rating=5, comment="Great!")
+        self.review = Review.objects.create(user=self.user, product=self.product, rating=5, comment="Great!", is_approved=True)
 
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)

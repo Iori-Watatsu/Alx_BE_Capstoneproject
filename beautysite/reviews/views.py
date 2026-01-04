@@ -8,7 +8,7 @@ from .serializers import PostSerializer, ReviewSerializer
 from .permissions import IsAuthorOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ReviewFilter
-
+from reviews.views import ReviewViewSet
 
 # Create your views here.
 def reviews(request):

@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate, APIClient
 from category.models import Category
 from products.models import Product
 from cart.models import Cart, CartItem
@@ -8,6 +7,8 @@ from orders.models import Order
 from reviews.models import Review
 from wishlist.models import Wishlist
 from django.contrib.auth import get_user_model
+from cart.views import CartItemViewSet
+
 
 User = get_user_model()
 
@@ -37,7 +38,7 @@ class CartTests(APITestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_list_cart_items(self):
-        Cart_Item.objects.create(user=self.user, product=self.product, quantity=1)
+        CartItem.objects.create(user=self.user, product=self.product, quantity=1)
         request = self.factory.get('/api/cart/')
         force_authenticate(request, user=self.user)
         response = CartItemViewSet.as_view({'get':'list'})(request)

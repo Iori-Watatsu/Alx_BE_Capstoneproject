@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate, APIClient
 from category.models import Category
 from products.models import Product
 from cart.models import Cart, CartItem
@@ -8,6 +7,7 @@ from orders.models import Order
 from reviews.models import Review
 from wishlist.models import Wishlist
 from django.contrib.auth import get_user_model
+from products.views import ProductViewSet
 
 User = get_user_model()
 
@@ -23,7 +23,7 @@ class ProductTests(APITestCase):
             price=100.00,
             sale_price=90.00,
             sku="SH123",
-            stock_quantity=50,
+            stock=50,
             is_active=False,
             is_featured=True,
             category=self.category,
@@ -45,7 +45,7 @@ class ProductTests(APITestCase):
             'price': 120,
             'sale_price': 100,
             'sku': 'CO123',
-            'stock_quantity': 20
+            'stock': 20
         })
         force_authenticate(request, user=self.user)
         response = ProductViewSet.as_view({'post':'create'})(request)

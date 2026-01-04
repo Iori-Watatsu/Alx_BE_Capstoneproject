@@ -1,7 +1,10 @@
 from django.contrib.auth import get_user_model
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate, APIClient
 from .models import Order
 from .views import OrderViewSet
+from cart.models import Cart, CartItem
+from category.models import Category
+from products.models import Product
 
 User = get_user_model()
 
@@ -10,6 +13,19 @@ class OrderTests(APITestCase):
         self.factory = APIRequestFactory()
         self.user = User.objects.create_user(username="orderuser", password="pass123")
         self.order = Order.objects.create(user=self.user, total_price=500, status="pending")
+
+        self.category = Category.objects.create(name="Hair Care")
+        self.product = Product.objects.create(
+            name="Shampoo",
+            description="Hair shampoo",
+            price=100,
+            stock=50,
+            category=self.category
+        )
+        
+        self.cart = Cart.objects.create(user=self.user)
+        CartItem.objects.create(cart=self.cart, product=self.product, quantity=1)
+
 
     def test_list_orders(self):
         request = self.factory.get('/api/orders/')

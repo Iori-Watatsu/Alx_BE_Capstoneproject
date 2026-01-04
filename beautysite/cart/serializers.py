@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import Cart, Cart_Item, Post
+from .models import Cart, CartItem, Post
 
 
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cart_Item
+        model = CartItem
         fields = [
             'id',
             'product',

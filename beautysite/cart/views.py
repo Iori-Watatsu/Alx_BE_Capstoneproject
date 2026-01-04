@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework import generics, viewsets, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .models import Post, Cart_Item
+from .models import Post, CartItem
 from .serializers import PostSerializer, CartItemSerializer
 from .permissions import IsAuthorOrReadOnly
 from .filters import CartItemFilter
@@ -48,4 +48,4 @@ class CartItemViewSet(viewsets.ModelViewSet):
     ordering_fields = ['quantity', 'created_at']
 
     def get_queryset(self):
-        return Cart_Item.objects.filter(user=self.request.user)
+        return CartItem.objects.filter(user=self.request.user)

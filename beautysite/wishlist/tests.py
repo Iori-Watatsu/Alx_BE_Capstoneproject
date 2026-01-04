@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate, APIClient
 from category.models import Category
 from products.models import Product
 from cart.models import Cart, CartItem
@@ -8,6 +7,7 @@ from orders.models import Order
 from reviews.models import Review
 from wishlist.models import Wishlist
 from django.contrib.auth import get_user_model
+from wishlist.views import WishlistViewSet
 
 User = get_user_model()
 
