@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 from rest_framework import status
-from .models import Product
+from .models import Product, Category
 from .views import ProductViewSet
 
 User = get_user_model()
@@ -17,7 +17,8 @@ class ProductTests(APITestCase):
             price=100.00,
             sale_price=90.00,
             sku="SH123",
-            stock_quantity=50
+            stock_quantity=50,
+            category=self.category,
         )
 
     def test_list_products(self):
