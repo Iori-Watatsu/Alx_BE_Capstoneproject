@@ -23,7 +23,7 @@ class ProductTests(APITestCase):
             price=100.00,
             sale_price=90.00,
             sku="SH123",
-            stock=50,
+            #stock=50,
             is_active=False,
             is_featured=True,
             category=self.category,

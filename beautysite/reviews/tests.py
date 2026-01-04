@@ -22,7 +22,7 @@ class ReviewTests(APITestCase):
             price=120.00,
             sale_price=100.00,
             sku="CO123",
-            stock_quantity=20,
+            stock=20,
             is_active=False,
             is_featured=True,
             category=self.category,
