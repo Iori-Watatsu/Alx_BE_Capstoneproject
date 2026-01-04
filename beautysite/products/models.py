@@ -14,16 +14,16 @@ class Product(models.Model):
     sku = models.CharField(max_length=100)
     stock_quantity = models.IntegerField()
     is_featured = models.BooleanField(default=False)
-    is_active = models.BooleanField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
 class ProductImage(models.Model):
     
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image_url = models.CharField(max_length=50)
     alt_text = models.TextField()
-    is_primary = models.BooleanField()
+    is_primary = models.BooleanField(default=True)
 
 # Optimize queries to improve performance
 products = Product.objects.prefetch_related('category', 'images')
