@@ -41,3 +41,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+# alias for model name change for testing
+Cart_Item = CartItem

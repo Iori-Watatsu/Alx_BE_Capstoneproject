@@ -1,4 +1,6 @@
 from django.db import models
+
+from cart.filters import CartItemFilter
 from category.models import Category
 
 # Create your models here.
@@ -25,3 +27,4 @@ class ProductImage(models.Model):
 
 # Optimize queries to improve performance
 products = Product.objects.prefetch_related('category', 'images')
+
