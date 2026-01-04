@@ -16,27 +16,18 @@ class PostSerializer(serializers.ModelSerializer):
             'author_username',
             'created_at',
         ]
-        
+
 
 class OrderSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = Order
-        fields = [
-            'id',
-            'user',
-            'user_email',
-            'total_price',
-            'status',
-            'created_at',
-            'updated_at',
+        fields = '__all__'
+        read_only_fields = [
+            'total_price'
         ]
 
-        read_only_fields = [
-            'id',
-            'user',
-            'total_price',
-            'created_at',
-            'updated_at',
-        ]
+    def create(self, validate_data):
+        validate_data['total_price'] = validate_data.get('total_price', 0)
+        return super().create(validate_data)
