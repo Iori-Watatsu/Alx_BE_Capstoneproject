@@ -8,6 +8,7 @@ User = get_user_model()
 
 class WishlistTests(APITestCase):
     def setUp(self):
+        self.category = Category.objects.create(name="Hair Care")
         self.factory = APIRequestFactory()
         self.user = User.objects.create_user(username="wishlistuser", password="pass123")
         self.product = Product.objects.create(
@@ -17,7 +18,10 @@ class WishlistTests(APITestCase):
             price=150.00,
             sale_price=120.00,
             sku="BL123",
-            stock_quantity=30
+            stock_quantity=30,
+            is_active=False,
+            is_featured=True,
+            category=self.category
         )
 
     def test_add_to_wishlist(self):

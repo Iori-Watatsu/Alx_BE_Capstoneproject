@@ -1,4 +1,4 @@
-Found 9 test(s).
+Found 10 test(s).
 Operations to perform:
   Synchronize unmigrated apps: django_filters, messages, rest_framework, rest_framework_social_oauth2, staticfiles
   Apply all migrations: admin, auth, authtoken, cart, category, contenttypes, oauth2_provider, orders, products, reviews, sessions, social_django, users, wishlist

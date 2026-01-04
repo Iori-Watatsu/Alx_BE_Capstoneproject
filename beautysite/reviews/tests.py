@@ -8,6 +8,7 @@ User = get_user_model()
 
 class ReviewTests(APITestCase):
     def setUp(self):
+        self.category = Category.objects.create(name="Hair Care")
         self.factory = APIRequestFactory()
         self.user = User.objects.create_user(username="reviewer", password="pass123")
         self.product = Product.objects.create(
@@ -17,7 +18,10 @@ class ReviewTests(APITestCase):
             price=120.00,
             sale_price=100.00,
             sku="CO123",
-            stock_quantity=20
+            stock_quantity=20,
+            is_active=False,
+            is_featured=True,
+            category=self.category,
         )
         self.review = Review.objects.create(user=self.user, product=self.product, rating=5, comment="Great!")
 
