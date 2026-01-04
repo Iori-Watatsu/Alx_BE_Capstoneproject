@@ -1,6 +1,4 @@
 from django.db import models
-
-from cart.filters import CartItemFilter
 from category.models import Category
 
 # Create your models here.
