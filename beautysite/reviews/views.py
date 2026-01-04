@@ -45,6 +45,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
         filters.OrderingFilter,
     ]
 
-    filterset_class = ReviewViewSet
+    filterset_class = ReviewFilter
     search_fields = ['comment']
     ordering_fields = ['rating', 'created_at']
