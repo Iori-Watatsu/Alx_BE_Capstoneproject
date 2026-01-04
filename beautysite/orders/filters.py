@@ -12,8 +12,4 @@ class OrderFilter(django_filters.FilterSet):
 
     class Meta:
         model = Order
-        fields = {
-            'status':['exact'],
-            'total_price':['gte', 'lte'],
-            'created_at':['created_at_gte', 'created_at_lte'],
-        }
+        fields = ['created_at_gte', 'created_at_lte']
