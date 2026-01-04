@@ -8,14 +8,7 @@ class CustomUser(AbstractUser):
 
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
-    password = models.TextField()
-    first_name = models.TextField()
-    last_name = models.TextField()
     phone_number = models.CharField(max_length=255, blank=True)
-    date_joined = models.DateTimeField()
-    is_active = models.BooleanField()
-    is_staff = models.BooleanField()
-    is_superuser = models.BooleanField()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
