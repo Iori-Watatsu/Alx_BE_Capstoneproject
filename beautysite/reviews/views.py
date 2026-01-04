@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from rest_framework import generics, viewsets, filters
+from rest_framework import generics, viewsets, filters, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .models import Post, Review
@@ -11,9 +12,10 @@ from .filters import ReviewFilter
 from reviews.views import ReviewViewSet
 
 # Create your views here.
-def reviews(request):
-    return HttpResponse("Product reviews")
-
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class PostListCreateAPIView(generics.ListCreateAPIView):
     authentication_classes = [TokenAuthentication]
@@ -38,6 +40,16 @@ class PostRetrieveUpdateDestroyAPIView(
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def my_reviews(self, request):
+        reviews = Review.objects.filter(user=request.user)
+        serializer = self.get_serializer(reviews, many=True)
+        return Response(serializer.data)
 
     filter_backends = [
         DjangoFilterBackend,

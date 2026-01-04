@@ -11,13 +11,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = [
-            'id',
-            'title',
-            'content',
-            'author_username',
-            'created_at',
-        ]
+        fields = '__all__'
 
 class ProductMiniSerializer(serializers.ModelSerializer):
 
@@ -38,14 +32,8 @@ class WishlistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wishlist
-        fields = [
-            'id',
-            'user',
-            'product',
-            'product_details',
-            'created_at',
-        ]
-        read_only_fields = ['created_at']
+        fields = '__all__'
+        read_only_fields = ['created_at', 'user']
 
     def validate(self, data):
 

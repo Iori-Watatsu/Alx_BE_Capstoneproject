@@ -8,6 +8,9 @@ from reviews.models import Review
 from wishlist.models import Wishlist
 from django.contrib.auth import get_user_model
 from products.views import ProductViewSet
+from rest_framework import status
+from django.urls import reverse
+from django.test import TestCase
 
 User = get_user_model()
 
@@ -15,7 +18,7 @@ class ProductTests(APITestCase):
     def setUp(self):
         self.category = Category.objects.create(name='Hair Care')
         self.factory = APIRequestFactory()
-        self.user = User.objects.create_user(username="testuser", password="pass123")
+        self.user = User.objects.create_user(username="testuser", password="pass123", email='test@example.com')
         self.product = Product.objects.create(
             name="Shampoo",
             description="Hair shampoo",
@@ -29,8 +32,15 @@ class ProductTests(APITestCase):
             category=self.category,
         )
 
+        self.admin_user = User.objects.create_superuser(
+            username='admin',
+            password='adminpass123',
+            email='admin@example.com'
+        )
+
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
+        self.url = reverse('product-list')
 
     def test_list_products(self):
         request = self.factory.get('/api/products/')

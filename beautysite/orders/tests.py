@@ -11,13 +11,14 @@ User = get_user_model()
 class OrderTests(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.user = User.objects.create_user(username="orderuser", password="pass123")
+        self.user = User.objects.create_user(username="orderuser", password="pass123", email='test@example.com')
         self.order = Order.objects.create(user=self.user, total_price=500, status="pending")
 
         self.category = Category.objects.create(name="Hair Care")
         self.product = Product.objects.create(
             name="Shampoo",
             description="Hair shampoo",
+            sale_price=90.00,
             price=100,
             stock=50,
             category=self.category
@@ -26,6 +27,9 @@ class OrderTests(APITestCase):
         self.cart = Cart.objects.create(user=self.user)
         CartItem.objects.create(cart=self.cart, product=self.product, quantity=1)
 
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.url = reverse('order-list')
 
     def test_list_orders(self):
         request = self.factory.get('/api/orders/')
