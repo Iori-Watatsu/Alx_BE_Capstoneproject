@@ -2,7 +2,7 @@ from django.db import models
 from django.template.context_processors import request
 
 from products.models import Product
-from users.models import Profile
+from users.models import Profile, CustomUser
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -35,7 +35,7 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="posts"
+        related_name="cart_posts"
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

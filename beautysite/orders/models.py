@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import TextField, CASCADE
 from products.models import Product
-from users.models import Profile
+from users.models import Profile, CustomUser
 from django.conf import settings
 from django.contrib.auth.models import  User
 
@@ -40,7 +40,7 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="posts"
+        related_name="order_posts"
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
