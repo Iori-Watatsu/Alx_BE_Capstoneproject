@@ -18,7 +18,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         return request.user and request.user.is_staff
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all(is_active=True)
+    queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
