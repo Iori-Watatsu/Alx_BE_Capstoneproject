@@ -18,8 +18,13 @@ class OrderTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_create_order(self):
+        payload = {
+            "cart_id": self.cart.id,
+            "shipping_address": "123 Main St",
+            "payment_method": "card"
+        }
         request = self.factory.post('/api/orders/', {'total_price': 200, 'status': 'pending'})
         force_authenticate(request, user=self.user)
-        response = OrderViewSet.as_view({'post':'create'})(request)
+        response = self.client.post("/api/orders/", payload, format='json')
         self.assertEqual(response.status_code, 201)
         

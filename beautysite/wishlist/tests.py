@@ -7,7 +7,7 @@ from cart.models import Cart, CartItem
 from orders.models import Order
 from reviews.models import Review
 from wishlist.models import Wishlist
-from users.models import User
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
