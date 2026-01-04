@@ -1,8 +1,13 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-from .models import Wishlist
-from .views import WishlistViewSet
+
+from category.models import Category
 from products.models import Product
+from cart.models import Cart, CartItem
+from orders.models import Order
+from reviews.models import Review
+from wishlist.models import Wishlist
+from users.models import User
 
 User = get_user_model()
 
@@ -23,6 +28,9 @@ class WishlistTests(APITestCase):
             is_featured=True,
             category=self.category
         )
+
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
 
     def test_add_to_wishlist(self):
         request = self.factory.post('/api/wishlist/', {'product': self.product.id})

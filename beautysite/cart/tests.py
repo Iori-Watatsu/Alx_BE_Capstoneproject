@@ -1,13 +1,19 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-from .models import Cart_Item
-from .views import CartItemViewSet
+
+from category.models import Category
 from products.models import Product
+from cart.models import Cart, CartItem
+from orders.models import Order
+from reviews.models import Review
+from wishlist.models import Wishlist
+from users.models import User
 
 User = get_user_model()
 
 class CartTests(APITestCase):
     def setUp(self):
+        self.category = Category.objects.create(name="Hair Care")
         self.factory = APIRequestFactory()
         self.user = User.objects.create_user(username="cartuser", password="pass123")
         self.product = Product.objects.create(
@@ -17,8 +23,12 @@ class CartTests(APITestCase):
             price=100.00,
             sale_price=90.00,
             sku="SH123",
-            stock_quantity=50
+            stock_quantity=50,
+            category=self.category,
         )
+
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
 
     def test_add_item_to_cart(self):
         request = self.factory.post('/api/cart/', {'product': self.product.id, 'quantity': 2})
