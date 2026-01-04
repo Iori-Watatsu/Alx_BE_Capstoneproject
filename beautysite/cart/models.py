@@ -17,7 +17,7 @@ class Cart(models.Model):
         return f"Cart({self.user})"
 
 class CartItem(models.Model):
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     cart = models.ForeignKey(
         'cart.Cart',
         on_delete=models.CASCADE, null=True, blank=True

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Post, Wishlist
 from products.models import Product
+from wishlist.views import WishlistViewSet
 
 class PostSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(
@@ -56,5 +57,5 @@ class WishlistSerializer(serializers.ModelSerializer):
                 "This product is already in your wishlist."
             )
 
-        return data 
+        return data
 

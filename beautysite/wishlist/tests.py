@@ -8,6 +8,7 @@ from reviews.models import Review
 from wishlist.models import Wishlist
 from django.contrib.auth import get_user_model
 from wishlist.views import WishlistViewSet
+from django.test import TestCase
 
 User = get_user_model()
 

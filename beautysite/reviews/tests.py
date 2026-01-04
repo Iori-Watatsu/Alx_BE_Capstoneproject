@@ -7,6 +7,8 @@ from orders.models import Order
 from reviews.models import Review
 from wishlist.models import Wishlist
 from django.contrib.auth import get_user_model
+from reviews.views import ReviewViewSet
+
 
 User = get_user_model()
 
