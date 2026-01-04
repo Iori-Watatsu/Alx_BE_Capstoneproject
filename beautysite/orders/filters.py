@@ -3,10 +3,17 @@ from .models import  Order
 
 class OrderFilter(django_filters.FilterSet):
 
+    created_at_gte = django_filters.DateTimeFilter(
+        field_name='created_at', lookup_expr='gte'
+    )
+    created_at_lte = django_filters.DateTimeFilter(
+        field_name='created_at', lookup_expr='lte'
+    )
+
     class Meta:
         model = Order
         fields = {
             'status':['exact'],
             'total_price':['gte', 'lte'],
-            'created_at':['date', 'date_gte', 'date_lte']
+            'created_at':['created_at_gte', 'created_at_lte'],
         }
