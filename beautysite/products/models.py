@@ -4,14 +4,14 @@ from category.models import Category
 # Create your models here.
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     brand = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     sale_price = models.DecimalField(max_digits=10, decimal_places=2)
     sku = models.CharField(max_length=100)
     stock_quantity = models.IntegerField()
-    is_featured = models.BooleanField()
+    is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField()
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
