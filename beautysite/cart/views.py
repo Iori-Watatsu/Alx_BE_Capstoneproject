@@ -4,7 +4,7 @@ from rest_framework import generics, viewsets, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .models import Post, Cart_Item
-from serializers import PostSerializer, CartItemSerializer
+from .serializers import PostSerializer, CartItemSerializer
 from .permissions import IsAuthorOrReadOnly
 from .filters import CartItemFilter
 from django_filters.rest_framework import DjangoFilterBackend
