@@ -1,4 +1,4 @@
-Found 8 test(s).
+Found 10 test(s).
 Operations to perform:
   Synchronize unmigrated apps: django_filters, messages, rest_framework, rest_framework_social_oauth2, staticfiles
   Apply all migrations: admin, auth, authtoken, cart, category, contenttypes, oauth2_provider, orders, products, reviews, sessions, social_django, users, wishlist
@@ -30,7 +30,10 @@ Running migrations:
   Applying authtoken.0004_alter_tokenproxy_options... OK
   Applying category.0001_initial... OK
   Applying products.0001_initial... OK
+  Applying products.0002_rename_stock_quantity_product_stock... OK
+  Applying products.0003_alter_product_sale_price... OK
   Applying cart.0001_initial... OK
+  Applying cart.0002_alter_cart_updated_at_alter_cart_user_and_more... OK
   Applying oauth2_provider.0001_initial... OK
   Applying oauth2_provider.0002_auto_20190406_1805... OK
   Applying oauth2_provider.0003_auto_20201211_1314... OK
@@ -45,7 +48,6 @@ Running migrations:
   Applying oauth2_provider.0012_add_token_checksum... OK
   Applying orders.0001_initial... OK
   Applying orders.0002_initial... OK
-  Applying products.0002_rename_stock_quantity_product_stock... OK
   Applying reviews.0001_initial... OK
   Applying reviews.0002_initial... OK
   Applying sessions.0001_initial... OK
@@ -66,4 +68,4 @@ Running migrations:
   Applying social_django.0015_rename_extra_data_new_usersocialauth_extra_data... OK
   Applying social_django.0016_alter_usersocialauth_extra_data... OK
   Applying wishlist.0001_initial... OK
-System check identified no issues (0 silenced).
+  Applying wishlist.0002_alter_wishlist_options... OK

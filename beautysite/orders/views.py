@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, viewsets, filters
+from rest_framework import generics, viewsets, filters, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .models import Post, Order
-from .serializers import PostSerializer, OrderSerializer
+from .models import Post, Order, OrderItem
+from .serializers import PostSerializer, OrderSerializer, OrderItemSerializer
 from .permissions import IsAuthorOrReadOnly
 from .filters import OrderFilter
 
@@ -33,7 +33,9 @@ class PostRetrieveUpdateDestroyAPIView(
     serializer_class = PostSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
+    queryset = OrderItem.Objects.all()
     serializer_class = OrderSerializer
+    pagination_class = [permissions.IsAuthenticated]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -47,3 +49,6 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Cart, CartItem, Post
-
+from products.serializers import ProductSerializer
+from products.models import Product
 
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,7 +10,17 @@ class CartItemSerializer(serializers.ModelSerializer):
             'id',
             'product',
             'quantity',
+            'added_at',
+            'total_price',
         ]
+        read_only_fields = ['id', 'added_at', 'total_price']
+
+    def create(self, validated_data):
+        # Get product from product_id
+        product_id = validated_data.pop('product_id')
+        product = Product.objects.get(id=product_id)
+        validated_data['product'] = product
+        return super().create(validated_data)
 
 class PostSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(
@@ -19,10 +30,14 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = [
-            'id',
-            'title',
-            'content',
-            'author_username',
-            'created_at',
-        ]
+        fields = '__all__'
+
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
+    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+
+    class Meta:
+        model = Cart
+        fields = ['id', 'user', 'items', 'created_at', 'updated_at', 'total_price']
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at', 'total_price']

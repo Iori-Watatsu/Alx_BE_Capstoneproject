@@ -38,9 +38,9 @@ class ProductTests(APITestCase):
             email='admin@example.com'
         )
 
+        self.url = reverse('review-list')
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
-        self.url = reverse('product-list')
 
     def test_list_products(self):
         request = self.factory.get('/api/products/')

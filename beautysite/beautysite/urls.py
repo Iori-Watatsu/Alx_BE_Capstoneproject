@@ -26,9 +26,18 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/auth/', include('users.urls')),
+    path('api/products/', include('products.urls')),
+    path('api/cart/', include('cart.urls')),
+    path('api/orders/', include('orders.urls')),
+    path('api/reviews/', include('reviews.urls')),
+    path('api/wishlist/', include('wishlist.urls')),
+
     path('', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile',
@@ -41,4 +50,4 @@ urlpatterns = [
     path('api/auth/login/', TokenObtainPairView.as_view()),
     path('api/auth/refresh/', TokenRefreshView.as_view()),
     path('auth/', include('rest_framework_social_oauth2.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

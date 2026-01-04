@@ -8,6 +8,7 @@ from reviews.models import Review
 from wishlist.models import Wishlist
 from django.contrib.auth import get_user_model
 from reviews.views import ReviewViewSet
+from django.urls import reverse 
 
 
 User = get_user_model()
@@ -30,9 +31,14 @@ class ReviewTests(APITestCase):
             category=self.category,
         )
         self.review = Review.objects.create(user=self.user, product=self.product, rating=5, comment="Great!", is_approved=True)
-
+        self.review_data = {
+            'product': self.product.id,  # Make sure this is included
+            'rating': 5,
+            'comment': 'Great product!'
+        }
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
+        self.url = reverse('review-list')
 
     def test_create_review(self):
         request = self.factory.post('/api/reviews/', {'product': self.product.id, 'rating': 4, 'comment': 'Nice!'})

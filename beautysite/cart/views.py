@@ -1,13 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework import generics, viewsets, filters
+from rest_framework import generics, viewsets, filters, status, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .models import Post, CartItem
+from .models import Post, CartItem, Cart
 from .serializers import PostSerializer, CartItemSerializer
 from .permissions import IsAuthorOrReadOnly
 from .filters import CartItemFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from products.models import Product
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 def cart(request):
@@ -35,7 +39,7 @@ class PostReviewUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class CartItemViewSet(viewsets.ModelViewSet):
     serializer_class = CartItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     filter_backends = [
         DjangoFilterBackend,
@@ -48,4 +52,29 @@ class CartItemViewSet(viewsets.ModelViewSet):
     ordering_fields = ['quantity', 'created_at']
 
     def get_queryset(self):
-        return CartItem.objects.filter(user=self.request.user)
+
+        cart = Cart.objects.get_or_create(user=self.request.user)[0]
+        return CartItem.objects.filter(cart=cart)
+
+    def perform_create(self, serializer):
+
+        cart, created = Cart.objects.get_or_create(user=self.request.user)
+        serializer.save(cart=cart)
+
+    @action(detail=False, methods=['get'])
+    def my_cart(self, request):
+        cart = Cart.objects.get_or_create(user=request.user)[0]
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
+
+    class CartViewSet(viewsets.ModelViewSet):
+    serializer_class = CartSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
+    def get_object(self):
+        
+        cart, created = Cart.objects.get_or_create(user=self.request.user)
+        return cart

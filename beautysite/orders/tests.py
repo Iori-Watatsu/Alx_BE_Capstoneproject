@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate, APIClient
 from .models import Order
@@ -5,6 +6,7 @@ from .views import OrderViewSet
 from cart.models import Cart, CartItem
 from category.models import Category
 from products.models import Product
+from django.urls import reverse
 
 User = get_user_model()
 
