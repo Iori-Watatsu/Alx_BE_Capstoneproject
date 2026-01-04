@@ -5,4 +5,4 @@ class CartItemFilter(django_filters.FilterSet):
 
     class Meta:
         model = CartItem
-        fieldsets = ['product', 'user']
+        fields = '__all__'
