@@ -7,17 +7,6 @@ from django.contrib.auth.models import  User
 
 # Create your models here.
 class Order(models.Model):
-    
-    order_number = models.CharField(max_length=100)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.TextField()
-    shipping_address = models.TextField()
-    billing_address = models.TextField()
-    payment_method = models.CharField(max_length=100)
-    payment_status = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
     order_status = [
         ('pending', 'Pending'),
         ('processing', 'Processing'),
@@ -25,8 +14,23 @@ class Order(models.Model):
         ('delivered', 'Delivered'),
         ('cancelled', 'Cancelled'),
     ]
+    
+    order_number = models.CharField(max_length=100)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(
+        max_length=20,
+        choices=order_status,
+        default="pending"
+    )
+    shipping_address = models.TextField()
+    billing_address = models.TextField()
+    payment_method = models.CharField(max_length=100)
+    payment_status = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
-class Order_Item(models.Model):
+class OrderItem(models.Model):
 
     order_id = models.ForeignKey(Order, on_delete=CASCADE, related_name='orders')
     product = models.ForeignKey(Product, on_delete=CASCADE, related_name='order_items')
