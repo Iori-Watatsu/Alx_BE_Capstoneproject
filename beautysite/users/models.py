@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
     is_superuser = models.BooleanField()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = 'username'
+    REQUIRED_FIELDS = ['username']
 
 class Profile(models.Model):
     
