@@ -18,10 +18,6 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 from users.views import SignUpView
-from rest_framework_simplejwt.views import(
-    TokenObtainPairView,
-    TokenRefreshView,
-)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -37,6 +33,7 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/reviews/', include('reviews.urls')),
     path('api/wishlist/', include('wishlist.urls')),
+    path('api/category', include('category.urls')),
 
     path('', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
@@ -51,3 +48,6 @@ urlpatterns = [
     path('api/auth/refresh/', TokenRefreshView.as_view()),
     path('auth/', include('rest_framework_social_oauth2.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
