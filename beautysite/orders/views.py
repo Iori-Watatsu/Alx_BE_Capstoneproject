@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, filters, permissions
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 from .models import Post, Order, OrderItem
 from .serializers import PostSerializer, OrderSerializer, OrderItemSerializer
 from .permissions import IsAuthorOrReadOnly
@@ -11,8 +10,9 @@ from .filters import OrderFilter
 
 # Create your views here.
 class PostListCreateAPIView(generics.ListCreateAPIView):
+    queryset = OrderItem.objects.all()
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
 
     def get_queryset(self):
@@ -21,11 +21,9 @@ class PostListCreateAPIView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-class PostRetrieveUpdateDestroyAPIView(
-    generics.RetrieveUpdateDestroyAPIView
-):
+class PostRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
