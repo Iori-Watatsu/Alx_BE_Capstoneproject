@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Order
+from .models import Post, Order, OrderItem
 
 class PostSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(
@@ -25,9 +25,14 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
         read_only_fields = [
-            'total_price'
+            ('user')
         ]
 
     def create(self, validate_data):
         validate_data['total_price'] = validate_data.get('total_price', 0)
         return super().create(validate_data)
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
