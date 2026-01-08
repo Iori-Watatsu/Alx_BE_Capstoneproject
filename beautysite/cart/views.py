@@ -4,7 +4,7 @@ from rest_framework import generics, viewsets, filters, status, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .models import Post, CartItem, Cart
-from .serializers import PostSerializer, CartItemSerializer
+from .serializers import PostSerializer, CartItemSerializer, CartSerializer
 from .permissions import IsAuthorOrReadOnly
 from .filters import CartItemFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -38,6 +38,7 @@ class PostReviewUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
 
 class CartItemViewSet(viewsets.ModelViewSet):
+    queryset = Cart.objects.all()
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -68,13 +69,14 @@ class CartItemViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     class CartViewSet(viewsets.ModelViewSet):
-    serializer_class = CartSerializer
-    permission_classes = [permissions.IsAuthenticated]
+        queryset = Cart.objects.all()
+        serializer_class = CartSerializer
+        permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
+        def get_queryset(self):
+            return Cart.objects.filter(user=self.request.user)
 
-    def get_object(self):
-        
-        cart, created = Cart.objects.get_or_create(user=self.request.user)
-        return cart
+        def get_object(self):
+
+            cart, created = Cart.objects.get_or_create(user=self.request.user)
+            return cart

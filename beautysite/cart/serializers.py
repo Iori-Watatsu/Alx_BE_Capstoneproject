@@ -6,14 +6,7 @@ from products.models import Product
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = [
-            'id',
-            'product',
-            'quantity',
-            'added_at',
-            'total_price',
-        ]
-        read_only_fields = ['id', 'added_at', 'total_price']
+        fields = '__all__'
 
     def create(self, validated_data):
         # Get product from product_id
@@ -39,5 +32,4 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['id', 'user', 'items', 'created_at', 'updated_at', 'total_price']
-        read_only_fields = ['id', 'user', 'created_at', 'updated_at', 'total_price']
+        fields = '__all__'
