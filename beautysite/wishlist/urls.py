@@ -10,4 +10,5 @@ router.register(r'', WishlistViewSet, basename='wishlist')
 urlpatterns = [
     path('', include(router.urls)),
     path('posts/', PostListCreateAPIView.as_view(), name='post-list'),
-    path('posts/<int:pk>/', PostRetrieveUpdateDestroyAPIView.as_view(), name='post-detail'),
+    path('posts/<int:pk>/', PostRetrieveUpdateDestroyAPIView.as_view(), name='post-detail')
+]
