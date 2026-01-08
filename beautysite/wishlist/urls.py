@@ -1,7 +1,10 @@
+from django.conf.urls.i18n import urlpatterns
+from django.db import router
 from django.urls import path
-from .views import (PostListCreateAPIView, PostRetrieveUpdateDestroyAPIView)
+from .views import (PostListCreateAPIView, PostRetrieveUpdateDestroyAPIView, WishlistViewSet)
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('posts/', PostListCreateAPIView.as_view()),
-    path('posts/<int:pk>/', PostRetrieveUpdateDestroyAPIView.as_view()),
-]
+router = DefaultRouter()
+router.register(r'', WishlistViewSet, basename='wishlist')
+
+urlpatterns = router.urls
