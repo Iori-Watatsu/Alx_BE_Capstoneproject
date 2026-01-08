@@ -33,7 +33,7 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/reviews/', include('reviews.urls')),
     path('api/wishlist/', include('wishlist.urls')),
-    path('api/category', include('category.urls')),
+    path('api/category/', include('category.urls')),
 
     path('', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
