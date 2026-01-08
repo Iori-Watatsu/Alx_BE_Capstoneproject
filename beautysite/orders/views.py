@@ -10,9 +10,6 @@ from .permissions import IsAuthorOrReadOnly
 from .filters import OrderFilter
 
 # Create your views here.
-def orders(request):
-    return HttpResponse("View your order")
-
 class PostListCreateAPIView(generics.ListCreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -33,7 +30,7 @@ class PostRetrieveUpdateDestroyAPIView(
     serializer_class = PostSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = OrderItem.Objects.all()
+    queryset = OrderItem.objects.all()
     serializer_class = OrderSerializer
     pagination_class = [permissions.IsAuthenticated]
     filter_backends = [
