@@ -7,6 +7,7 @@ from .models import Post, Order, OrderItem
 from .serializers import PostSerializer, OrderSerializer, OrderItemSerializer
 from .permissions import IsAuthorOrReadOnly
 from .filters import OrderFilter
+from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 class PostListCreateAPIView(generics.ListCreateAPIView):
@@ -30,7 +31,7 @@ class PostRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderSerializer
-    pagination_class = [permissions.IsAuthenticated]
+    pagination_class = PageNumberPagination
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
