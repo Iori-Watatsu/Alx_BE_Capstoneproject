@@ -7,8 +7,3 @@ router = DefaultRouter()
 router.register(r'', OrderViewSet, basename='order')
 
 urlpatterns = router.urls
-
-urlpatterns = [
-    path('posts/', PostListCreateAPIView.as_view()),
-    path('posts/<int:pk>/', PostRetrieveUpdateDestroyAPIView.as_view()),
-]
