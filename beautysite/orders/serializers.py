@@ -9,13 +9,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = [
-            'id',
-            'title',
-            'content',
-            'author_username',
-            'created_at',
-        ]
+        fields = '__all__'
 
 
 class OrderSerializer(serializers.ModelSerializer):
