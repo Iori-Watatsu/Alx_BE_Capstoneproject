@@ -38,6 +38,7 @@ class CartTests(APITestCase):
         request = self.factory.post('/api/cart/', {'product': self.product.id, 'quantity': 2})
         force_authenticate(request, user=self.user)
         response = CartItemViewSet.as_view({'post':'create'})(request)
+        print(f"Response data: {response.data}")
         self.assertEqual(response.status_code, 201)
 
     def test_list_cart_items(self):
