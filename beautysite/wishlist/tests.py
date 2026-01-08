@@ -24,7 +24,7 @@ class WishlistTests(APITestCase):
             price=150.00,
             sale_price=120.00,
             sku="BL123",
-            stock=30,
+            in_stock=30,
             is_active=False,
             is_featured=True,
             category=self.category

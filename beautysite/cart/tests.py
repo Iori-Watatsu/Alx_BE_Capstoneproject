@@ -26,7 +26,7 @@ class CartTests(APITestCase):
             price=100.00,
             sale_price=90.00,
             sku="SH123",
-            stock=50,
+            in_stock=50,
             category=self.category,
         )
 

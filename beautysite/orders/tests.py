@@ -22,7 +22,7 @@ class OrderTests(APITestCase):
             description="Hair shampoo",
             sale_price=90.00,
             price=100,
-            stock_quantity=50,
+            in_stock=50,
             category=self.category
         )
         
