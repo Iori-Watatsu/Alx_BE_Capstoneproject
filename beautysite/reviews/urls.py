@@ -8,7 +8,3 @@ router.register(r'', ReviewViewSet, basename='review')
 
 urlpatterns = router.urls
 
-urlpatterns = [
-    path('posts/', PostListCreateAPIView.as_view()),
-    path('posts/<int:pk>/', PostRetrieveUpdateDestroyAPIView.as_view()),
-]
