@@ -16,9 +16,6 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 def cart(request):
     return HttpResponse("What's in your cart")
-
-def perform_create(self, serializer):
-    serializer.save(user=self.request.user)
     
 class PostListCreateAPIView(generics.ListCreateAPIView):
     authentication_classes = [TokenAuthentication]
@@ -38,7 +35,6 @@ class PostReviewUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
 
 class CartItemViewSet(viewsets.ModelViewSet):
-    queryset = Cart.objects.all()
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -53,29 +49,20 @@ class CartItemViewSet(viewsets.ModelViewSet):
     ordering_fields = ['quantity', 'created_at']
 
     def get_queryset(self):
-
         cart = Cart.objects.get_or_create(user=self.request.user)[0]
-        return CartItem.objects.filter(cart=cart)
+        return CartItem.objects.filter(idt=cart.id)
 
     def perform_create(self, serializer):
-
-        cart = Cart.objects.get_or_create(user=self.request.user)
+        cart, _ = Cart.objects.get_or_create(user=self.request.user)
         serializer.save(cart=cart)
 
-    @action(detail=False, methods=['get'])
-    def my_cart(self, request):
-        cart = Cart.objects.get_or_create(user=request.user)[0]
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
-
 class CartViewSet(viewsets.ModelViewSet):
-    queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         cart = Cart.objects.get_or_create(user=self.request.user)
-        return CartItem.objects.filter(cart=cart).order_by('id')
+        return CartItem.objects.filter(cart=cart.id)
 
     def get_object(self):
 
