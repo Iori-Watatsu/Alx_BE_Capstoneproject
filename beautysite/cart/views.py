@@ -59,7 +59,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
 
-        cart, _ = Cart.objects.get_or_create(user=self.request.user)
+        cart = Cart.objects.get_or_create(user=self.request.user)
         serializer.save(cart=cart)
 
     @action(detail=False, methods=['get'])
@@ -74,10 +74,10 @@ class CartViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        cart, _ = Cart.objects.get_or_create(user=self.request.user)
+        cart = Cart.objects.get_or_create(user=self.request.user)
         return CartItem.objects.filter(cart=cart).order_by('id')
 
     def get_object(self):
 
-        cart, created = Cart.objects.get_or_create(user=self.request.user)
+        cart = Cart.objects.get_or_create(user=self.request.user)
         return cart
