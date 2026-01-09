@@ -59,7 +59,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
 
-        cart, created = Cart.objects.get_or_create(user=self.request.user)
+        cart, _ = Cart.objects.get_or_create(user=self.request.user)
         serializer.save(cart=cart)
 
     @action(detail=False, methods=['get'])

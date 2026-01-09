@@ -7,6 +7,7 @@ class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = '__all__'
+        read_only_fields = ['cart']
 
     def create(self, validated_data):
         # Get product from product_id
