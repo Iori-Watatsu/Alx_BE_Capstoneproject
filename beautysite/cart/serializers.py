@@ -9,12 +9,7 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['cart']
 
-    def create(self, validated_data):
-        # Get product from product_id
-        product_id = validated_data.pop('product_id')
-        product = Product.objects.get(id=product_id)
-        validated_data['product'] = product
-        return super().create(validated_data)
+    
 
 class PostSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(
