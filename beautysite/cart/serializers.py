@@ -9,8 +9,6 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['cart']
 
-    
-
 class PostSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(
         source='author.useranme',
