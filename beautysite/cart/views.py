@@ -37,6 +37,7 @@ class PostReviewUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 class CartItemViewSet(viewsets.ModelViewSet):
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
 
     filter_backends = [
         DjangoFilterBackend,
@@ -50,7 +51,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         cart = Cart.objects.get_or_create(user=self.request.user)[0]
-        return CartItem.objects.filter(idt=cart.id)
+        return CartItem.objects.filter(cart=cart).order_by('id')
 
     def perform_create(self, serializer):
         cart, _ = Cart.objects.get_or_create(user=self.request.user)
@@ -62,7 +63,7 @@ class CartViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         cart = Cart.objects.get_or_create(user=self.request.user)
-        return CartItem.objects.filter(cart=cart.id)
+        return Cart.objects.filter(id=cart.id)
 
     def get_object(self):
 
