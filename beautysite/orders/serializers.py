@@ -18,13 +18,22 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
-        read_only_fields = [
-            ('user')
-        ]
+        read_only_fields = ['user']
 
     def create(self, validate_data):
         validate_data['total_price'] = validate_data.get('total_price', 0)
-        return super().create(validate_data)
+        user = self.context['request'].user
+        order = Order.objects.create(user=user, **validate_data)
+        cart = validate_data.get('cart', None)
+        if cart:
+            for item in cart.cartitem_set.all():
+                OrderItem.objects.create(
+                    order = order,
+                    product = item.product,
+                    quantity = item.quantity,
+                    price = item.product.sale_price
+                )
+        return order
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
