@@ -16,13 +16,12 @@ User = get_user_model()
 
 class ProductTests(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
+        self.admin_user = User.objects.create_user(
             username='admin',
             email='admin@test.com',
             password='examplepasswd',
             is_staff='True'
         )
-        self.user.save()
         self.factory = APIRequestFactory()
         self.client.force_authenticate(user=self.user)
         self.category = Category.objects.create(name='Hair Care')
@@ -39,13 +38,7 @@ class ProductTests(APITestCase):
             category=self.category,
         )
 
-        self.admin_user = User.objects.create_superuser(
-            username='admin',
-            password='adminpass123',
-            email='admin@example.com'
-        )
-
-        self.url = reverse('review-list')
+        self.products_url = reverse('product-list')
         self.client = APIClient()
 
     def test_list_products(self):
