@@ -35,28 +35,41 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ['total_price', 'status', 'created_at']
 
     def create(self, validate_data):
-        validate_data['total_price'] = validate_data.get('total_price', 0)
-        user = self.context['request'].user
+        request = self.context['request']
+        user = request.user
+        cart_id = validate_data.pop('cart_id', None)
+        cart_items = CartItem.objects.filter(cart_id=cart_id)
+
+
+        if not cart_items.exists():
+            raise serializers.ValidationError("Cart is empty.")
+
         order = Order.objects.create(
             user=user,
             order_number=str(uuid.uuid4()),
             payment_status='pending',
+            status='pending',
+            total_price=0,
             **validated_data
         )
-        cart_id = validate_data.pop('cart_id', None)
-        cart_items = CartItem.objects.filter(cart_id=cart_id)
+
         total_price = 0
 
         if cart_id:
 
-            for item in cart_items():
+            for item in cart_items:
+                subtotal = item.quantity * item.product.sale_price
+
                 OrderItem.objects.create(
                     order = order,
                     product = item.product,
                     quantity = item.quantity,
-                    price = item.product.sale_price
+                    price_at_purchase = item.product.sale_price,
+                    subtotal = subtotal
                 )
-                total_price += item.quantity * item.product.sale_price
+
+                total_price += subtotal
+
             order.total_price = total_price
             order.save()
         return order
