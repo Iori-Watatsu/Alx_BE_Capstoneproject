@@ -16,7 +16,7 @@ User = get_user_model()
 
 class ProductTests(APITestCase):
     def setUp(self):
-        self.admin_user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username='admin',
             email='admin@test.com',
             password='examplepasswd',
