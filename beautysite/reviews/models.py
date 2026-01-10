@@ -11,7 +11,7 @@ class Review(models.Model):
     rating = models.IntegerField()
     title = models.CharField(max_length=100)
     comment = models.TextField()
-    is_approved = models.BooleanField()
+    is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
     content = models.TextField()
     ordering = ['created_at']
