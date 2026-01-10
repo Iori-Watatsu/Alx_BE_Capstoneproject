@@ -38,6 +38,8 @@ class ProductSerializer(serializers.ModelSerializer):
         return data
 
     def get_is_on_sale(self, obj):
+        if obj.sale_price is None:
+            return False
         return obj.sale_price < obj.price
 
 
