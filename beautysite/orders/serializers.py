@@ -16,6 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source='user.email', read_only=True)
+    cart_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Order
@@ -26,11 +27,12 @@ class OrderSerializer(serializers.ModelSerializer):
         validate_data['total_price'] = validate_data.get('total_price', 0)
         user = self.context['request'].user
         order = Order.objects.create(user=user, **validate_data)
-        cart = validate_data.get('cart', None)
+        cart_id = validate_data.popt('cart_id', None)
+
         if cart_id:
             cart_items = CartItem.objects.filter(cart_id=cart_id)
             total_price = 0
-            for item in cart.cartitem_set.all():
+            for item in cart_items():
                 OrderItem.objects.create(
                     order = order,
                     product = item.product,
