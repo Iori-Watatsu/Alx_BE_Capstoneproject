@@ -32,6 +32,7 @@ class PostRetrieveUpdateDestroyAPIView(
 class WishlistViewSet(viewsets.ModelViewSet):
     serializer_class = WishlistSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None 
 
     filter_backends = [
         DjangoFilterBackend,
