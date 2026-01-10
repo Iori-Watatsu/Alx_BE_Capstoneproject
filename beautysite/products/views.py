@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 from .filters import ProductFilter
 
@@ -20,6 +20,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [IsAdminUser]
 
     filter_backends = [
         DjangoFilterBackend,
