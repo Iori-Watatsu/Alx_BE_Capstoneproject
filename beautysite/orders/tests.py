@@ -45,8 +45,6 @@ class OrderTests(APITestCase):
             "shipping_address": "123 Main St",
             "payment_method": "card"
         }
-        request = self.factory.post('/api/orders/', {'total_price': 200, 'status': 'pending'})
-        force_authenticate(request, user=self.user)
         response = self.client.post("/api/orders/", payload, format='json')
         self.assertEqual(response.status_code, 201)
         
