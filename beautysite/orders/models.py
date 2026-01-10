@@ -7,7 +7,7 @@ from django.contrib.auth.models import  User
 
 # Create your models here.
 class Order(models.Model):
-    order_status = [
+    ORDER_STATUS = [
         ('pending', 'Pending'),
         ('processing', 'Processing'),
         ('shipped', 'Shipped'),
@@ -15,24 +15,24 @@ class Order(models.Model):
         ('cancelled', 'Cancelled'),
     ]
     
-    order_number = models.CharField(max_length=100)
+    order_number = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     status = models.CharField(
         max_length=20,
-        choices=order_status,
-        default="pending"
+        choices=ORDER_STATUS,
+        default='pending'
     )
     shipping_address = models.TextField()
-    billing_address = models.TextField()
+    billing_address = models.TextField(blank=True)
     payment_method = models.CharField(max_length=100)
-    payment_status = models.CharField(max_length=100)
+    payment_status = models.CharField(max_length=100, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
 class OrderItem(models.Model):
 
-    order_id = models.ForeignKey(Order, on_delete=CASCADE, related_name='orders')
+    order = models.ForeignKey(Order, on_delete=CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=CASCADE, related_name='order_items')
     quantity = models.IntegerField()
     price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
