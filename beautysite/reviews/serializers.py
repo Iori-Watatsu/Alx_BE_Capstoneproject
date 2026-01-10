@@ -1,10 +1,18 @@
 from rest_framework import serializers
 from .models import Review, Post
-
+from products.models import Product
 class ReviewSerializer (serializers.ModelSerializer):
     review_name = serializers.CharField(
         source='user.username',
         read_only=True
+    )
+
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all()
     )
 
     class Meta:
