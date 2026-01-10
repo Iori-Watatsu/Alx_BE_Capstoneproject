@@ -10,7 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     is_on_sale = serializers.SerializerMethodField()
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
-    category_id = serializers.IntegerField(write_only=True, required=False)
+    #category_id = serializers.IntegerField(write_only=True, required=False)
 
     class Meta:
         model = Product
