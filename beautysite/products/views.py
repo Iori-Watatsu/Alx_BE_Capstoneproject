@@ -20,7 +20,6 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
 
     filter_backends = [
         DjangoFilterBackend,
