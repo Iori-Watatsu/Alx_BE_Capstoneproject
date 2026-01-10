@@ -22,7 +22,7 @@ class ProductTests(APITestCase):
             password='examplepasswd',
             is_staff=True
         )
-        self.factory = APIRequestFactory()
+        self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.category = Category.objects.create(name='Hair Care')
         self.product = Product.objects.create(
@@ -42,7 +42,7 @@ class ProductTests(APITestCase):
         self.client = APIClient()
 
     def test_list_products(self):
-        response = self.client.get('/api/products/')
+        response = self.client.get(self.products_url)
         self.assertEqual(response.status_code, 200)
 
     def test_create_product_requires_auth(self):
@@ -53,7 +53,9 @@ class ProductTests(APITestCase):
             'price': 120,
             'sale_price': 100,
             'sku': 'CO123',
-            'in_stock': 20
+            'in_stock': 20,
+            'category':self.category.id,
+            'is_active':True
         }
         response = self.client.post('/api/products', payload, format='json')
         self.assertEqual(response.status_code, 201)
