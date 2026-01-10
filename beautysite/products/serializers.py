@@ -17,12 +17,12 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'description', 'brand', 'price',
             'sale_price', 'sku', 'in_stock', 'category',
-            'is_active',
+            'is_active', 'is_featured',
         ]
         read_only_fields = [
             'id', 'name', 'description', 'brand', 
             'sale_price', 'sku', 'category',
-            'is_active', 
+            'is_active', 'is_featured',
         ]
 
     def validate_price(self, value):
