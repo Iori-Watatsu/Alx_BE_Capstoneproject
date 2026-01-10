@@ -20,7 +20,7 @@ class ProductTests(APITestCase):
             username='admin',
             email='admin@test.com',
             password='examplepasswd',
-            is_staff='True'
+            is_staff=True
         )
         self.factory = APIRequestFactory()
         self.client.force_authenticate(user=self.user)
@@ -53,7 +53,7 @@ class ProductTests(APITestCase):
             'price': 120,
             'sale_price': 100,
             'sku': 'CO123',
-            'stock': 20
+            'in_stock': 20
         }
         response = self.client.post('/api/products', payload, format='json')
         self.assertEqual(response.status_code, 201)
