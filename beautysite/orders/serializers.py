@@ -34,10 +34,10 @@ class OrderSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['total_price', 'status', 'created_at']
 
-    def create(self, validate_data):
+    def create(self, validated_data):
         request = self.context['request']
         user = request.user
-        cart_id = validate_data.pop('cart_id', None)
+        cart_id = validated_data.pop('cart_id', None)
         cart_items = CartItem.objects.filter(cart_id=cart_id)
 
 
@@ -55,23 +55,21 @@ class OrderSerializer(serializers.ModelSerializer):
 
         total_price = 0
 
-        if cart_id:
+        for item in cart_items:
+            subtotal = item.quantity * item.product.sale_price
 
-            for item in cart_items:
-                subtotal = item.quantity * item.product.sale_price
+            OrderItem.objects.create(
+                order = order,
+                product = item.product,
+            quantity = item.quantity,
+                price_at_purchase = item.product.sale_price,
+                subtotal = subtotal
+            )
 
-                OrderItem.objects.create(
-                    order = order,
-                    product = item.product,
-                    quantity = item.quantity,
-                    price_at_purchase = item.product.sale_price,
-                    subtotal = subtotal
-                )
+            total_price += subtotal
 
-                total_price += subtotal
-
-            order.total_price = total_price
-            order.save()
+        order.total_price = total_price
+        order.save()
         return order
 
 class OrderItemSerializer(serializers.ModelSerializer):
