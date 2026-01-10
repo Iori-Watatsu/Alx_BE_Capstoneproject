@@ -14,10 +14,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = '__all__'
-        read_only_fields = [
+        fields = [
             'id', 'name', 'description', 'brand', 'price',
             'sale_price', 'sku', 'in_stock', 'category',
+            'is_active',
+        ]
+        read_only_fields = [
+            'id', 'name', 'description', 'brand', 
+            'sale_price', 'sku', 'category',
             'is_active', 
         ]
 
