@@ -16,10 +16,16 @@ User = get_user_model()
 
 class ProductTests(APITestCase):
     def setUp(self):
-        self.category = Category.objects.create(name='Hair Care')
-        self.factory = APIRequestFactory()
+        self.user = User.objects.create_user(
+            username='admin',
+            email='admin@test.com',
+            password='examplepasswd'
+        )
         self.user.is_staff = True
         self.user.save()
+        self.client.force_authenticate(user=self.user)
+        self.category = Category.objects.create(name='Hair Care')
+        self.factory = APIRequestFactory()
         self.product = Product.objects.create(
             name="Shampoo",
             description="Hair shampoo",
@@ -41,11 +47,9 @@ class ProductTests(APITestCase):
 
         self.url = reverse('review-list')
         self.client = APIClient()
-        self.client.force_authenticate(user=self.user)
 
     def test_list_products(self):
-        request = self.factory.get('/api/products/')
-        response = ProductViewSet.as_view({'get':'list'})(request)
+        response = self.client.get('/api/products/')
         self.assertEqual(response.status_code, 200)
 
     def test_create_product_requires_auth(self):
@@ -58,6 +62,5 @@ class ProductTests(APITestCase):
             'sku': 'CO123',
             'stock': 20
         })
-        force_authenticate(request, user=self.user)
-        response = ProductViewSet.as_view({'post':'create'})(request)
+        response = self.client.post('/api/products', request, format='json')
         self.assertEqual(response.status_code, 201)
