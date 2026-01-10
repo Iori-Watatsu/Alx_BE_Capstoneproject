@@ -57,5 +57,5 @@ class ProductTests(APITestCase):
             'category':self.category.id,
             'is_active':True
         }
-        response = self.client.post('/api/products', payload, format='json')
+        response = self.client.post(self.products_url, payload, format='json')
         self.assertEqual(response.status_code, 201)
