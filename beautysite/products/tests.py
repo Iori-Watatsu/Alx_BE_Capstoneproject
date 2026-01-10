@@ -19,13 +19,13 @@ class ProductTests(APITestCase):
         self.user = User.objects.create_user(
             username='admin',
             email='admin@test.com',
-            password='examplepasswd'
+            password='examplepasswd',
+            is_staff='True'
         )
-        self.user.is_staff = True
         self.user.save()
+        self.factory = APIRequestFactory()
         self.client.force_authenticate(user=self.user)
         self.category = Category.objects.create(name='Hair Care')
-        self.factory = APIRequestFactory()
         self.product = Product.objects.create(
             name="Shampoo",
             description="Hair shampoo",
@@ -34,7 +34,7 @@ class ProductTests(APITestCase):
             sale_price=90.00,
             sku="SH123",
             in_stock=50,
-            is_active=False,
+            is_active=True,
             is_featured=True,
             category=self.category,
         )
@@ -53,7 +53,7 @@ class ProductTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_create_product_requires_auth(self):
-        request = self.factory.post('/api/products/', {
+        payload = {
             'name': 'Conditioner',
             'description': 'Hair conditioner',
             'brand': 'BrandX',
@@ -61,6 +61,6 @@ class ProductTests(APITestCase):
             'sale_price': 100,
             'sku': 'CO123',
             'stock': 20
-        })
-        response = self.client.post('/api/products', request, format='json')
+        }
+        response = self.client.post('/api/products', payload, format='json')
         self.assertEqual(response.status_code, 201)
