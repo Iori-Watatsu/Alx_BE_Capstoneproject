@@ -39,7 +39,6 @@ class ProductTests(APITestCase):
         )
 
         self.products_url = reverse('product-list')
-        self.client = APIClient()
 
     def test_list_products(self):
         response = self.client.get(self.products_url)
