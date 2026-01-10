@@ -18,7 +18,8 @@ class ProductTests(APITestCase):
     def setUp(self):
         self.category = Category.objects.create(name='Hair Care')
         self.factory = APIRequestFactory()
-        self.user = User.objects.create_user(username="testuser", password="pass123", email='test@example.com')
+        self.user.is_staff = True
+        self.user.save()
         self.product = Product.objects.create(
             name="Shampoo",
             description="Hair shampoo",
