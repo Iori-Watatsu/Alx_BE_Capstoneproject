@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 import django_filters.rest_framework
 from rest_framework import authentication
 from datetime import timedelta
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'orders',
     'wishlist',
     'reviews',
+    'beautysite'
 
     # DRF apps
     'rest_framework',
@@ -59,6 +60,10 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2'
+
+    # EXTRA SEC FEAT
+    'crispy_forms'
+    'axes'
 ]
 
 MIDDLEWARE = [
@@ -69,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files
 ]
 
 ROOT_URLCONF = 'beautysite.urls'
@@ -76,7 +82,7 @@ ROOT_URLCONF = 'beautysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

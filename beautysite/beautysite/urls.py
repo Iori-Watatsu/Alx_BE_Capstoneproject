@@ -24,6 +24,8 @@ from rest_framework_simplejwt.views import (
 )
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,6 +49,18 @@ urlpatterns = [
     path('api/auth/login/', TokenObtainPairView.as_view()),
     path('api/auth/refresh/', TokenRefreshView.as_view()),
     path('auth/', include('rest_framework_social_oauth2.urls')),
+
+    # Authentication URLs
+    path('auth/login/', auth_views.LoginView.as_view(template_name='auth/login.html'), name='login'),
+    path('auth/logout/', auth_views.LogoutView.as_view(template_name='auth/logout.html'), name='logout'),
+    path('auth/signup/', views.signup, name='signup'),
+    path('auth/change-password/', auth_views.PasswordChangeView.as_view(
+             template_name='auth/change_password.html',
+             success_url='/auth/password-changed/'
+         ), name='change_password'),
+    path('auth/password-changed/', auth_views.PasswordChangeDoneView.as_view(
+             template_name='auth/password_changed.html'
+         ), name='password_change_done'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
