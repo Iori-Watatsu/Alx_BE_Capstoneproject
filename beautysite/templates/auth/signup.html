@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign Up - Bloom Beauty{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-user-plus"></i>
+            <h1>Create Account</h1>
+            <p>Join Bloom Beauty for exclusive offers</p>
+        </div>
+
+        <form method="post" class="auth-form" id="signupForm">
+            {% csrf_token %}
+
+            <!-- Security Token -->
+            <input type="hidden" name="security_token" id="securityToken">
+
+            <!-- Timestamp to prevent replay attacks -->
+            <input type="hidden" name="timestamp" id="timestamp">
+
+            <div class="form-group">
+                <label for="id_username">
+                    <i class="fas fa-user"></i> Username
+                </label>
+                <input type="text"
+                       name="username"
+                       id="id_username"
+                       class="ios-input"
+                       required
+                       minlength="3"
+                       maxlength="30"
+                       pattern="[a-zA-Z0-9_]+"
+                       title="Letters, numbers, and underscores only"
+                       autocomplete="username"
+                       autocapitalize="none"
+                       autocorrect="off"
+                       spellcheck="false">
+                <div class="input-hint">3-30 characters, letters, numbers, underscores</div>
+                <div class="input-error" id="usernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_email">
+                    <i class="fas fa-envelope"></i> Email Address
+                </label>
+                <input type="email"
+                       name="email"
+                       id="id_email"
+                       class="ios-input"
+                       required
+                       autocomplete="email"
+                       inputmode="email">
+                <div class="input-error" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password1">
+                    <i class="fas fa-key"></i> Password
+                </label>
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="password1"
+                           id="id_password1"
+                           class="ios-input"
+                           required
+                           autocomplete="new-password"
+                           minlength="12"
+                           placeholder="Minimum 12 characters">
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_password1')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-requirements">
+                    <p>Must include:</p>
+                    <ul>
+                        <li id="req-length">✓ At least 12 characters</li>
+                        <li id="req-upper">✓ One uppercase letter</li>
+                        <li id="req-lower">✓ One lowercase letter</li>
+                        <li id="req-number">✓ One number</li>
+                        <li id="req-special">✓ One special character</li>
+                    </ul>
+                </div>
+                <div class="password-strength" id="passwordStrength"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2">
+                    <i class="fas fa-key"></i> Confirm Password
+                </label>
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="password2"
+                           id="id_password2"
+                           class="ios-input"
+                           required
+                           autocomplete="new-password">
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_password2')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="input-error" id="confirmError"></div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox"
+                           name="terms"
+                           id="id_terms"
+                           required
+                           data-required-text="You must agree to the terms">
+                    <span>
+                        I agree to the
+                        <a href="#" onclick="showTerms()">Terms of Service</a> and
+                        <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+                    </span>
+                </label>
+                <div class="input-error" id="termsError"></div>
+            </div>
+
+            <!-- Honeypot -->
+            <div class="honeypot">
+                <label for="fullname">Full Name (leave blank)</label>
+                <input type="text" name="fullname" id="fullname" autocomplete="off">
+            </div>
+
+            <!-- CAPTCHA Placeholder -->
+            <div class="captcha-container">
+                <div class="captcha" id="captchaBox">
+                    <!-- CAPTCHA would be loaded here -->
+                    <p>Security check loading...</p>
+                </div>
+                <button type="button" class="ios-btn-secondary" onclick="refreshCaptcha()">
+                    <i class="fas fa-redo"></i> Refresh
+                </button>
+            </div>
+
+            <button type="submit" class="ios-btn-primary auth-btn" id="submitBtn" disabled>
+                <i class="fas fa-user-plus"></i> Create Account
+                <span class="spinner hidden" id="signupSpinner"></span>
+            </button>
+
+            <div class="auth-links">
+                <p>Already have an account? <a href="{% url 'login' %}">Sign in here</a></p>
+            </div>
+        </form>
+
+        <div class="security-features">
+            <h4><i class="fas fa-shield-alt"></i> Security Features</h4>
+            <ul>
+                <li><i class="fas fa-check"></i> Password encrypted with Argon2</li>
+                <li><i class="fas fa-check"></i> Rate-limited signup attempts</li>
+                <li><i class="fas fa-check"></i> Email verification required</li>
+                <li><i class="fas fa-check"></i> No password storage in plain text</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal" id="termsModal">
+    <div class="modal-content">
+        <h3>Terms of Service</h3>
+        <div class="modal-body">
+            <!-- Terms content -->
+            <p>By creating an account, you agree to our terms...</p>
+        </div>
+        <button class="ios-btn-primary" onclick="closeModal('termsModal')">Close</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script nonce="{{ request.csp_nonce }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set timestamp
+        document.getElementById('timestamp').value = Date.now();
+
+        // Initialize password validation
+        const password1 = document.getElementById('id_password1');
+        const password2 = document.getElementById('id_password2');
+
+        password1.addEventListener('input', validatePassword);
+        password2.addEventListener('input', validateConfirmPassword);
+        document.getElementById('id_username').addEventListener('input', validateUsername);
+        document.getElementById('id_email').addEventListener('input', validateEmail);
+        document.getElementById('id_terms').addEventListener('change', validateForm);
+
+        // Check username availability (debounced)
+        let usernameTimeout;
+        document.getElementById('id_username').addEventListener('input', function() {
+            clearTimeout(usernameTimeout);
+            usernameTimeout = setTimeout(checkUsernameAvailability, 500);
+        });
+
+        // Form submission protection
+        const form = document.getElementById('signupForm');
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                return;
+            }
+
+            // Check honeypot
+            if (document.getElementById('fullname').value.trim() !== '') {
+                e.preventDefault();
+                console.log('Bot detected');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('signupSpinner').classList.remove('hidden');
+        });
+    });
+
+    function validatePassword() {
+        const password = document.getElementById('id_password1').value;
+        const requirements = {
+            length: password.length >= 12,
+            upper: /[A-Z]/.test(password),
+            lower: /[a-z]/.test(password),
+            number: /[0-9]/.test(password),
+            special: /[^A-Za-z0-9]/.test(password)
+        };
+
+        // Update requirement indicators
+        Object.keys(requirements).forEach(req => {
+            const element = document.getElementById('req-' + req);
+            if (requirements[req]) {
+                element.classList.add('met');
+                element.classList.remove('unmet');
+            } else {
+                element.classList.remove('met');
+                element.classList.add('unmet');
+            }
+        });
+
+        // Calculate strength
+        const metCount = Object.values(requirements).filter(v => v).length;
+        const strengthDiv = document.getElementById('passwordStrength');
+        const strengthLevels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+        strengthDiv.textContent = 'Strength: ' + strengthLevels[metCount];
+        strengthDiv.className = 'password-strength strength-' + metCount;
+
+        validateForm();
+        return metCount >= 4; // At least 4 requirements met
+    }
+
+    function validateConfirmPassword() {
+        const password1 = document.getElementById('id_password1').value;
+        const password2 = document.getElementById('id_password2').value;
+        const errorDiv = document.getElementById('confirmError');
+
+        if (password2 && password1 !== password2) {
+            errorDiv.textContent = 'Passwords do not match';
+            return false;
+        }
+
+        errorDiv.textContent = '';
+        validateForm();
+        return true;
+    }
+
+    function validateUsername() {
+        const username = document.getElementById('id_username').value;
+        const errorDiv = document.getElementById('usernameError');
+
+        if (username.length < 3) {
+            errorDiv.textContent = 'Username too short';
+            return false;
+        }
+
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            errorDiv.textContent = 'Only letters, numbers, and underscores allowed';
+            return false;
+        }
+
+        errorDiv.textContent = '';
+        validateForm();
+        return true;
+    }
+
+    function validateEmail() {
+        const email = document.getElementById('id_email').value;
+        const errorDiv = document.getElementById('emailError');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email && !emailRegex.test(email)) {
+            errorDiv.textContent = 'Please enter a valid email address';
+            return false;
+        }
+
+        errorDiv.textContent = '';
+        validateForm();
+        return true;
+    }
+
+    function validateForm() {
+        const isPasswordValid = validatePassword();
+        const isConfirmValid = validateConfirmPassword();
+        const isUsernameValid = validateUsername();
+        const isEmailValid = validateEmail();
+        const termsChecked = document.getElementById('id_terms').checked;
+
+        const isValid = isPasswordValid && isConfirmValid && isUsernameValid && isEmailValid && termsChecked;
+        document.getElementById('submitBtn').disabled = !isValid;
+
+        return isValid;
+    }
+
+    function checkUsernameAvailability() {
+        const username = document.getElementById('id_username').value;
+        if (username.length < 3) return;
+
+        // This would typically make an AJAX call to check availability
+        // For now, simulate
+        console.log('Checking availability for:', username);
+    }
+
+    function showTerms() {
+        openModal('termsModal');
+    }
+
+    function showPrivacy() {
+        showIOSAlert('Privacy Policy', 'Our privacy policy ensures your data is protected...');
+    }
+
+    function refreshCaptcha() {
+        // This would reload CAPTCHA
+        console.log('Refreshing CAPTCHA');
+    }
+</script>
+{% endblock %}

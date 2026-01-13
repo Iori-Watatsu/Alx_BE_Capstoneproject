@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Bloom Beauty{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="welcome-section">
+    <div class="welcome-card">
+        <h1 class="welcome-title">
+            {% if user.is_authenticated %}
+                Welcome back, {{ user.first_name|default:user.username }}! 👋
+            {% else %}
+                Welcome to Bloom Beauty 🌸
+            {% endif %}
+        </h1>
+        <p class="welcome-subtitle">
+            Discover premium beauty products tailored for you
+        </p>
+
+        {% if not user.is_authenticated %}
+        <div class="auth-cta">
+            <a href="{% url 'signup' %}" class="ios-btn-primary">
+                <i class="fas fa-user-plus"></i> Create Account
+            </a>
+            <a href="{% url 'login' %}" class="ios-btn-secondary">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<section class="featured-section">
+    <h2>Featured Beauty Products</h2>
+    <div class="products-grid">
+        <!-- Products will be loaded via JavaScript -->
+    </div>
+</section>
+
+<!-- Security Tips -->
+<section class="security-tips">
+    <h3><i class="fas fa-shield-alt"></i> Security First</h3>
+    <div class="tips-grid">
+        <div class="tip-card">
+            <i class="fas fa-lock"></i>
+            <h4>Secure Login</h4>
+            <p>Your password is encrypted using Argon2</p>
+        </div>
+        <div class="tip-card">
+            <i class="fas fa-shield-check"></i>
+            <h4>CSRF Protected</h4>
+            <p>All forms are protected against attacks</p>
+        </div>
+        <div class="tip-card">
+            <i class="fas fa-user-shield"></i>
+            <h4>Privacy Focused</h4>
+            <p>We never share your personal data</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/profile.js' %}"></script>
+<script nonce="{{ request.csp_nonce }}">
+    // Index page specific JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load featured products
+        loadFeaturedProducts();
+
+        // Check for welcome message
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('welcome') === 'true') {
+            showIOSAlert('Welcome!', 'Your account has been created successfully.');
+        }
+    });
+
+    function loadFeaturedProducts() {
+        // This would typically come from an API
+        // For now, show placeholder
+        console.log('Loading featured products...');
+    }
+</script>
+{% endblock %}

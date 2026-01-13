@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Change Password - Bloom Beauty{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-key"></i>
+            <h1>Change Password</h1>
+            <p>Update your password for enhanced security</p>
+        </div>
+
+        <form method="post" class="auth-form" id="changePasswordForm">
+            {% csrf_token %}
+
+            <!-- Current Password -->
+            <div class="form-group">
+                <label for="id_old_password">
+                    <i class="fas fa-lock"></i> Current Password
+                </label>
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="old_password"
+                           id="id_old_password"
+                           class="ios-input"
+                           required
+                           autocomplete="current-password"
+                           placeholder="Enter your current password">
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_old_password')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                {% if form.old_password.errors %}
+                <div class="input-error">{{ form.old_password.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- New Password -->
+            <div class="form-group">
+                <label for="id_new_password1">
+                    <i class="fas fa-key"></i> New Password
+                </label>
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="new_password1"
+                           id="id_new_password1"
+                           class="ios-input"
+                           required
+                           autocomplete="new-password"
+                           minlength="12"
+                           placeholder="Minimum 12 characters"
+                           oninput="validateNewPassword()">
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_new_password1')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-requirements">
+                    <p>Your new password must:</p>
+                    <ul>
+                        <li id="new-req-length">Be at least 12 characters</li>
+                        <li id="new-req-upper">Contain an uppercase letter</li>
+                        <li id="new-req-lower">Contain a lowercase letter</li>
+                        <li id="new-req-number">Contain a number</li>
+                        <li id="new-req-special">Contain a special character</li>
+                        <li id="new-req-different">Be different from old password</li>
+                    </ul>
+                </div>
+                <div class="password-strength" id="newPasswordStrength"></div>
+                {% if form.new_password1.errors %}
+                <div class="input-error">{{ form.new_password1.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Confirm New Password -->
+            <div class="form-group">
+                <label for="id_new_password2">
+                    <i class="fas fa-key"></i> Confirm New Password
+                </label>
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="new_password2"
+                           id="id_new_password2"
+                           class="ios-input"
+                           required
+                           autocomplete="new-password"
+                           placeholder="Confirm your new password"
+                           oninput="validatePasswordMatch()">
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_new_password2')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="input-error" id="matchError"></div>
+                {% if form.new_password2.errors %}
+                <div class="input-error">{{ form.new_password2.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Password History Check -->
+            <div class="security-check">
+                <i class="fas fa-shield-check"></i>
+                <p>We check against previously used passwords for your security</p>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'profile' %}" class="ios-btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Cancel
+                </a>
+                <button type="submit" class="ios-btn-primary" id="submitBtn" disabled>
+                    <i class="fas fa-save"></i> Update Password
+                    <span class="spinner hidden" id="passwordSpinner"></span>
+                </button>
+            </div>
+        </form>
+
+        <!-- Security Recommendations -->
+        <div class="security-recommendations">
+            <h4><i class="fas fa-lightbulb"></i> Password Tips</h4>
+            <ul>
+                <li>Use a unique password for each account</li>
+                <li>Consider using a password manager</li>
+                <li>Enable two-factor authentication for extra security</li>
+                <li>Change your password every 90 days</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script nonce="{{ request.csp_nonce }}">
+    let oldPassword = '';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Store old password for comparison
+        document.getElementById('id_old_password').addEventListener('input', function() {
+            oldPassword = this.value;
+            validateNewPassword();
+        });
+
+        // Form validation
+        const form = document.getElementById('changePasswordForm');
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                return;
+            }
+
+            // Show loading
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('passwordSpinner').classList.remove('hidden');
+        });
+    });
+
+    function validateNewPassword() {
+        const newPassword = document.getElementById('id_new_password1').value;
+        const requirements = {
+            length: newPassword.length >= 12,
+            upper: /[A-Z]/.test(newPassword),
+            lower: /[a-z]/.test(newPassword),
+            number: /[0-9]/.test(newPassword),
+            special: /[^A-Za-z0-9]/.test(newPassword),
+            different: newPassword !== oldPassword
+        };
+
+        // Update indicators
+        Object.keys(requirements).forEach(req => {
+            const element = document.getElementById('new-req-' + req);
+            if (requirements[req]) {
+                element.classList.add('met');
+                element.classList.remove('unmet');
+            } else {
+                element.classList.remove('met');
+                element.classList.add('unmet');
+            }
+        });
+
+        // Calculate strength
+        const metCount = Object.values(requirements).filter(v => v).length;
+        const strengthDiv = document.getElementById('newPasswordStrength');
+        const strengthText = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent'][metCount] || 'Excellent';
+        strengthDiv.textContent = 'Strength: ' + strengthText;
+        strengthDiv.className = 'password-strength strength-' + Math.min(metCount, 5);
+
+        validateForm();
+        return metCount === 6; // All requirements met
+    }
+
+    function validatePasswordMatch() {
+        const password1 = document.getElementById('id_new_password1').value;
+        const password2 = document.getElementById('id_new_password2').value;
+        const errorDiv = document.getElementById('matchError');
+
+        if (password2 && password1 !== password2) {
+            errorDiv.textContent = 'New passwords do not match';
+            return false;
+        }
+
+        errorDiv.textContent = '';
+        validateForm();
+        return true;
+    }
+
+    function validateForm() {
+        const isNewValid = validateNewPassword();
+        const isMatchValid = validatePasswordMatch();
+        const oldPasswordFilled = document.getElementById('id_old_password').value.length > 0;
+
+        const isValid = isNewValid && isMatchValid && oldPasswordFilled;
+        document.getElementById('submitBtn').disabled = !isValid;
+
+        return isValid;
+    }
+</script>
+{% endblock %}

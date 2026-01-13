@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile - Bloom Beauty{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    {% if user.is_authenticated %}
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <i class="fas fa-user-circle"></i>
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar-img">
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <h1>{{ user.get_full_name|default:user.username }}</h1>
+            <p class="profile-email">{{ user.email }}</p>
+            <p class="profile-join">Member since {{ user.date_joined|date:"F Y" }}</p>
+        </div>
+        <div class="profile-actions">
+            <button class="ios-btn-secondary" onclick="editProfile()">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+        </div>
+    </div>
+
+    <!-- Security Status -->
+    <div class="security-status">
+        <h3><i class="fas fa-shield-alt"></i> Security Status</h3>
+        <div class="status-grid">
+            <div class="status-item {% if user.has_usable_password %}status-good{% endif %}">
+                <i class="fas fa-key"></i>
+                <span>Password Strength</span>
+                <div class="status-indicator"></div>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-envelope"></i>
+                <span>Email Verified</span>
+                <div class="status-indicator {% if user.emailaddress_set.filter(verified=True).exists %}status-good{% endif %}"></div>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-mobile-alt"></i>
+                <span>2FA Enabled</span>
+                <div class="status-indicator status-warning"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h3>Account Settings</h3>
+        <div class="actions-grid">
+            <a href="{% url 'change_password' %}" class="action-card">
+                <i class="fas fa-key"></i>
+                <span>Change Password</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" class="action-card" onclick="showTwoFASetup()">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Two-Factor Auth</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" class="action-card" onclick="showPrivacySettings()">
+                <i class="fas fa-user-shield"></i>
+                <span>Privacy Settings</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="{% url 'logout' %}" class="action-card logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Log Out</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Order History -->
+    <div class="order-history">
+        <h3>Recent Orders</h3>
+        <div class="orders-list">
+            <!-- Orders would be loaded here -->
+            <div class="empty-state">
+                <i class="fas fa-shopping-bag"></i>
+                <p>No orders yet</p>
+                <a href="{% url 'shop' %}" class="ios-btn-secondary">Start Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+
+    <!-- Not Authenticated State -->
+    <div class="auth-required">
+        <i class="fas fa-user-lock"></i>
+        <h2>Authentication Required</h2>
+        <p>Please log in to view your profile</p>
+        <div class="auth-buttons">
+            <a href="{% url 'login' %}" class="ios-btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Log In
+            </a>
+            <a href="{% url 'signup' %}" class="ios-btn-secondary">
+                <i class="fas fa-user-plus"></i> Sign Up
+            </a>
+        </div>
+    </div>
+
+    {% endif %}
+</div>
+
+<!-- Logout Confirmation Modal -->
+<div class="modal" id="logoutModal">
+    <div class="modal-content">
+        <h3>Confirm Logout</h3>
+        <p>Are you sure you want to log out from all devices?</p>
+        <div class="modal-actions">
+            <form action="{% url 'logout' %}" method="post" id="logoutForm">
+                {% csrf_token %}
+                <input type="hidden" name="all_devices" value="true">
+                <button type="button" class="ios-btn-secondary" onclick="closeModal('logoutModal')">Cancel</button>
+                <button type="submit" class="ios-btn-primary">Logout Everywhere</button>
+            </form>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="ios-btn-secondary">Logout This Device</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/profile.js' %}"></script>
+<script nonce="{{ request.csp_nonce }}">
+    // Profile page specific JavaScript
+    function editProfile() {
+        // Open edit profile modal
+        showIOSAlert('Edit Profile', 'Profile editing coming soon!');
+    }
+
+    function showTwoFASetup() {
+        showIOSAlert('Two-Factor Authentication', 'Enable 2FA for extra security. Coming soon!');
+    }
+
+    function showPrivacySettings() {
+        showIOSAlert('Privacy Settings', 'Control your data and privacy preferences.');
+    }
+
+    // Attach logout confirmation to logout link
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutLinks = document.querySelectorAll('a[href*="logout"]');
+        logoutLinks.forEach(link => {
+            if (link.classList.contains('logout')) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openModal('logoutModal');
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

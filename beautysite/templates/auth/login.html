@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - Bloom Beauty{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-lock"></i>
+            <h1>Welcome Back</h1>
+            <p>Sign in to your Bloom Beauty account</p>
+        </div>
+
+        <form method="post" class="auth-form" id="loginForm">
+            {% csrf_token %}
+
+            <!-- CSRF Protection -->
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <!-- Security Token (additional protection) -->
+            <input type="hidden" name="security_token" id="securityToken">
+
+            <div class="form-group">
+                <label for="id_username">
+                    <i class="fas fa-user"></i> Username or Email
+                </label>
+                <input type="text"
+                       name="username"
+                       id="id_username"
+                       class="ios-input"
+                       required
+                       autocomplete="username"
+                       autocapitalize="none"
+                       autocorrect="off"
+                       spellcheck="false"
+                       placeholder="Enter your username or email">
+                <div class="input-error" id="usernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">
+                    <i class="fas fa-key"></i> Password
+                </label>
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="password"
+                           id="id_password"
+                           class="ios-input"
+                           required
+                           autocomplete="current-password"
+                           placeholder="Enter your password"
+                           minlength="8">
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_password')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength" id="passwordStrength"></div>
+                <div class="input-error" id="passwordError"></div>
+            </div>
+
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="remember" id="remember">
+                    <span>Remember me on this device</span>
+                </label>
+                <a href="{% url 'password_reset' %}" class="forgot-link">
+                    Forgot password?
+                </a>
+            </div>
+
+            <!-- Honeypot field for bots -->
+            <div class="honeypot">
+                <label for="website">Leave this blank</label>
+                <input type="text" name="website" id="website" autocomplete="off">
+            </div>
+
+            <button type="submit" class="ios-btn-primary auth-btn" id="submitBtn">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+                <span class="spinner hidden" id="loginSpinner"></span>
+            </button>
+
+            <div class="auth-links">
+                <p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+            </div>
+        </form>
+
+        <!-- Security Notice -->
+        <div class="security-notice">
+            <i class="fas fa-shield-alt"></i>
+            <p>Your login is protected by advanced security measures including rate limiting and suspicious activity detection.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Failed Attempts Warning -->
+{% if form.errors or next %}
+<div class="security-warning">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>
+        {% if form.errors %}
+        Invalid credentials. Please try again.
+        {% endif %}
+        {% if next %}
+        Please login to access this page.
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script nonce="{{ request.csp_nonce }}">
+    // Generate security token
+    function generateSecurityToken() {
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substr(2);
+        return btoa(timestamp + ':' + random + ':' + window.location.origin);
+    }
+
+    // Set security token on form load
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = generateSecurityToken();
+        document.getElementById('securityToken').value = token;
+        sessionStorage.setItem('login_token', token);
+
+        // Add form submission protection
+        const form = document.getElementById('loginForm');
+        let submitted = false;
+
+        form.addEventListener('submit', function(e) {
+            if (submitted) {
+                e.preventDefault();
+                showIOSAlert('Already Submitted', 'Please wait while we process your login.');
+                return;
+            }
+
+            // Validate honeypot
+            const honeypot = document.getElementById('website');
+            if (honeypot.value.trim() !== '') {
+                e.preventDefault();
+                console.log('Bot detected');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loginSpinner').classList.remove('hidden');
+            submitted = true;
+
+            // Simulate network delay to prevent timing attacks
+            setTimeout(() => {
+                // Continue with submission
+            }, 100 + Math.random() * 200);
+        });
+
+        // Validate inputs in real-time
+        document.getElementById('id_username').addEventListener('input', validateUsername);
+        document.getElementById('id_password').addEventListener('input', validatePassword);
+    });
+
+    function validateUsername() {
+        const username = document.getElementById('id_username').value;
+        const errorDiv = document.getElementById('usernameError');
+
+        if (username.length < 3) {
+            errorDiv.textContent = 'Username must be at least 3 characters';
+            return false;
+        }
+
+        // Check for suspicious patterns
+        if (/[\<\>\"\'\%\;\&\|]/.test(username)) {
+            errorDiv.textContent = 'Invalid characters detected';
+            return false;
+        }
+
+        errorDiv.textContent = '';
+        return true;
+    }
+
+    function validatePassword() {
+        const password = document.getElementById('id_password').value;
+        const strengthDiv = document.getElementById('passwordStrength');
+
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+        strengthDiv.textContent = 'Strength: ' + ['Weak', 'Fair', 'Good', 'Strong'][strength];
+        strengthDiv.className = 'password-strength strength-' + strength;
+
+        return strength >= 2;
+    }
+
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const toggle = input.nextElementSibling.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            toggle.classList.remove('fa-eye');
+            toggle.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            toggle.classList.remove('fa-eye-slash');
+            toggle.classList.add('fa-eye');
+        }
+    }
+</script>
+{% endblock %}

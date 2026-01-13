@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Logout - Bloom Beauty{% endblock %}
+
+{% block content %}
+<div class="logout-container">
+    <div class="logout-card">
+        <div class="logout-header">
+            <i class="fas fa-sign-out-alt"></i>
+            <h1>Sign Out</h1>
+            <p>Are you sure you want to sign out?</p>
+        </div>
+
+        <div class="logout-options">
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next|default:'/' }}">
+
+                <div class="logout-action">
+                    <input type="radio" name="logout_type" id="logout_current" value="current" checked>
+                    <label for="logout_current">
+                        <i class="fas fa-mobile-alt"></i>
+                        <div>
+                            <h4>Logout from this device only</h4>
+                            <p>You'll stay logged in on your other devices</p>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="logout-action">
+                    <input type="radio" name="logout_type" id="logout_all" value="all">
+                    <label for="logout_all">
+                        <i class="fas fa-globe"></i>
+                        <div>
+                            <h4>Logout from all devices</h4>
+                            <p>Sign out everywhere for maximum security</p>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="logout-actions">
+                    <a href="{% url 'profile' %}" class="ios-btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                    <button type="submit" class="ios-btn-primary logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="logout-security">
+            <h4><i class="fas fa-shield-alt"></i> Security Information</h4>
+            <ul>
+                <li>Your session cookies will be deleted</li>
+                <li>Any active authentication tokens will be revoked</li>
+                <li>You'll need to login again to access protected pages</li>
+                <li>Cart items will be saved for your next visit</li>
+            </ul>
+        </div>
+
+        <div class="logout-reminder">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>
+                <strong>Security reminder:</strong> Always log out when using shared or public computers.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script nonce="{{ request.csp_nonce }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add confirmation for "logout all"
+        const form = document.querySelector('.logout-form');
+        const logoutAll = document.getElementById('logout_all');
+
+        form.addEventListener('submit', function(e) {
+            if (logoutAll.checked) {
+                const confirmed = confirm(
+                    'Warning: This will log you out from ALL devices.\n\n' +
+                    'This includes:\n' +
+                    '• Your phone\n' +
+                    '• Your tablet\n' +
+                    '• Your other browsers\n\n' +
+                    'Are you sure you want to continue?'
+                );
+
+                if (!confirmed) {
+                    e.preventDefault();
+                    document.getElementById('logout_current').checked = true;
+                }
+            }
+        });
+
+        // Add visual feedback
+        const logoutBtn = document.querySelector('.logout-btn');
+        logoutBtn.addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing out...';
+            this.disabled = true;
+        });
+    });
+</script>
+{% endblock %}
