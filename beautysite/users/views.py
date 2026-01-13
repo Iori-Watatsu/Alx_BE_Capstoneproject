@@ -20,7 +20,7 @@ def profile(request):
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
-    template_name = 'registration/signup.html'
+    template_name = 'registration/../templates/accounts/signup.html'
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
@@ -38,7 +38,7 @@ class SignUpView(CreateView):
         return response
 
 class CustomLoginView(LoginView):
-    template_name = 'registration/login.html'
+    template_name = 'registration/../templates/accounts/login.html'
     redirect_authenticated_user = True
 
     def post(self, request):
@@ -55,7 +55,7 @@ class CustomLoginView(LoginView):
 def profile(request):
     user = request.user
     profile, created = Profile.objects.get_or_create(user=user)
-    return render(request, 'accounts/profile.html', {
+    return render(request, 'auth/../templates/profile.html', {
         'user': user,
         'profile': profile
     })
