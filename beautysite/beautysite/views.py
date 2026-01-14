@@ -41,3 +41,7 @@ def shop(request):
 
 def cart(request):
     return render(request, 'cart.html')
+
+
+def csrf_failure(request, reason=""):
+    return render(request, "csrf_failure.html", status=403)
